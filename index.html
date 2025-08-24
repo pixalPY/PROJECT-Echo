@@ -1887,8 +1887,8 @@
                 throw new Error('Stripe not loaded');
               }
 
-              // Create checkout session on backend
-              const response = await fetch('/api/payments/create-checkout-session', {
+              // Create checkout session using Netlify function
+              const response = await fetch('/.netlify/functions/create-checkout-session', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

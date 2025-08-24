@@ -3,13 +3,21 @@
   command = "mkdir -p build && cp index.html build/ && cp -r server build/ 2>/dev/null || true"
   # Publish from the build directory to match Netlify UI expectations
   publish = "build"
+  # Functions directory for serverless functions
+  functions = "netlify/functions"
 
 [build.environment]
   # Disable npm install since we don't need it for static HTML
   NPM_FLAGS = "--no-optional"
 
 [[redirects]]
-  # Redirect all routes to index.html for single-page app behavior
+  # Don't redirect API functions
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  # Redirect all other routes to index.html for single-page app behavior
   from = "/*"
   to = "/index.html"
   status = 200

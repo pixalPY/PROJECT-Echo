@@ -1,0 +1,9 @@
+{
+  "name": "project-echo-netlify-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for PROJECT:Echo",
+  "main": "index.js",
+  "dependencies": {
+    "stripe": "^14.12.0"
+  }
+}
