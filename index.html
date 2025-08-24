@@ -767,22 +767,121 @@
             high: 'bg-red-100 text-red-800 border-red-200'
           };
 
+          // Firebase Authentication State Listener
+          useEffect(() => {
+            const { onAuthStateChanged } = window.firebaseAuthFunctions;
+            const { doc, getDoc } = window.firebaseFirestoreFunctions;
+            const auth = window.firebaseAuth;
+            const db = window.firebaseDB;
+
+            if (auth && onAuthStateChanged) {
+              const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                console.log('🔄 Auth state changed:', user?.uid);
+                
+                if (user) {
+                  try {
+                    // Get user data from Firestore
+                    const userDoc = await getDoc(doc(db, 'UserLOGININFORMATION', user.uid));
+                    
+                    if (userDoc.exists()) {
+                      const userData = userDoc.data();
+                      console.log('📄 Loaded user data from Firebase:', userData);
+                      
+                      // Set local state
+                      const existingUser = {
+                        id: user.uid,
+                        uid: user.uid,
+                        email: user.email,
+                        name: userData.displayName || userData.name,
+                        displayName: userData.displayName || userData.name,
+                        goals: userData.goals || [],
+                        tasks: userData.tasks || [],
+                        userCoins: userData.userCoins || 10,
+                        ownedItems: userData.ownedItems || [],
+                        userTheme: userData.userTheme || 'default',
+                        plants: userData.plants || []
+                      };
+                      
+                      setCurrentUser(existingUser);
+                      setTasks(existingUser.tasks);
+                      setOwnedItems(existingUser.ownedItems);
+                      setUserCoins(existingUser.userCoins);
+                      setPlants(existingUser.plants);
+                      setCurrentTheme(existingUser.userTheme);
+                      setIsAuthenticated(true);
+                      setSaveStatus('saved');
+                      
+                      console.log('✅ User auto-logged in:', user.uid);
+                    } else {
+                      console.warn('⚠️ User authenticated but no data found in Firestore');
+                      setIsAuthenticated(true);
+                      setCurrentUser({
+                        id: user.uid,
+                        uid: user.uid,
+                        email: user.email,
+                        name: user.displayName || user.email?.split('@')[0],
+                        displayName: user.displayName || user.email?.split('@')[0]
+                      });
+                    }
+                  } catch (error) {
+                    console.error('❌ Error loading user data:', error);
+                    setIsAuthenticated(false);
+                    setCurrentUser(null);
+                  }
+                } else {
+                  // User is signed out
+                  console.log('🚪 User signed out');
+                  setIsAuthenticated(false);
+                  setCurrentUser(null);
+                  setTasks([]);
+                  setPlants([]);
+                  setUserCoins(0);
+                  setOwnedItems([]);
+                  setCurrentTheme('default');
+                  setSaveStatus('saved');
+                }
+              });
+
+              // Cleanup subscription on unmount
+              return () => unsubscribe();
+            }
+          }, []);
+
           // Save user data to Firebase
           const saveUserDataToFirebase = async (userData) => {
             try {
-              if (!currentUser || !currentUser.uid) return;
+              console.log('🔄 Attempting to save data...', { currentUser: currentUser?.uid, userData });
+              
+              if (!currentUser || !currentUser.uid) {
+                console.warn('❌ No current user or UID, skipping save');
+                throw new Error('No authenticated user');
+              }
+              
+              if (!window.firebaseDB || !window.firebaseFirestoreFunctions) {
+                console.warn('❌ Firebase not initialized');
+                throw new Error('Firebase not initialized');
+              }
               
               const { doc, setDoc } = window.firebaseFirestoreFunctions;
               const db = window.firebaseDB;
               
-              await setDoc(doc(db, 'UserLOGININFORMATION', currentUser.uid), {
+              const dataToSave = {
                 ...userData,
-                lastUpdated: new Date().toISOString()
-              }, { merge: true });
+                lastUpdated: new Date().toISOString(),
+                uid: currentUser.uid,
+                email: currentUser.email,
+                displayName: currentUser.displayName || currentUser.name
+              };
               
-              console.log('✅ User data saved to Firebase');
+              console.log('💾 Saving to Firestore:', dataToSave);
+              
+              await setDoc(doc(db, 'UserLOGININFORMATION', currentUser.uid), dataToSave, { merge: true });
+              
+              console.log('✅ User data saved to Firebase successfully');
+              return true;
             } catch (error) {
-              console.error('Error saving user data to Firebase:', error);
+              console.error('❌ Error saving user data to Firebase:', error);
+              throw error;
             }
           };
 
@@ -2821,6 +2920,27 @@ For this demo, we'll just give you some bonus coins! 🎉`);
                       ) : (
                         <>💾 Save</>
                       )}
+                    </button>
+
+                    {/* Debug Button (temporary) */}
+                    <button
+                      onClick={() => {
+                        console.log('🔍 Debug Info:', {
+                          currentUser,
+                          isAuthenticated,
+                          firebaseAuth: window.firebaseAuth,
+                          firebaseDB: window.firebaseDB,
+                          firebaseAuthFunctions: window.firebaseAuthFunctions,
+                          firebaseFirestoreFunctions: window.firebaseFirestoreFunctions,
+                          tasks: tasks.length,
+                          userCoins,
+                          saveStatus
+                        });
+                        alert('Debug info logged to console (F12)');
+                      }}
+                      className="flex items-center gap-1 px-2 py-1 bg-yellow-500 text-white rounded text-xs hover:bg-yellow-600"
+                    >
+                      🔍 Debug
                     </button>
 
                     <button
