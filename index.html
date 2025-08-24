@@ -53,6 +53,9 @@
         addDoc,
         updateDoc
       };
+
+      // Initialize Stripe
+      window.stripe = Stripe('pk_test_51Rvuuc3bHJKA1SJwlKDVDaUogCMDrEHvSgleYLxsBHdXXoLiE5xEdmCLtcFggmNCCZk8s2AUN1jOzAaAYntPh2oF00MtslSllT');
     </script>
     <style>
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
@@ -987,7 +990,7 @@
                 return;
               }
 
-              if (authMode === 'signup') {
+            if (authMode === 'signup') {
                 // Create user with Firebase Auth
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
@@ -1011,32 +1014,32 @@
                 await setDoc(doc(db, 'UserLOGININFORMATION', user.uid), userData);
                 
                 // Set local state
-                const newUser = {
+              const newUser = { 
                   id: user.uid,
                   uid: user.uid,
                   email: user.email,
                   name: name,
                   displayName: name,
                   goals: goals,
-                  tasks: [],
-                  userCoins: 10,
-                  ownedItems: [],
-                  userTheme: 'default'
-                };
+                tasks: [],
+                userCoins: 10,
+                ownedItems: [],
+                userTheme: 'default'
+              };
                 
-                setCurrentUser(newUser);
+              setCurrentUser(newUser);
                 setCurrentTheme('default');
-                setIsAuthenticated(true);
-                
-                // Generate starter plan based on selected goals
+              setIsAuthenticated(true);
+              
+              // Generate starter plan based on selected goals
                 const starterTasks = generateStarterPlan(goals, user.uid);
-                setTasks(starterTasks);
-                
-                initializeGarden(newUser);
+              setTasks(starterTasks);
+              
+              initializeGarden(newUser);
                 
                 console.log('✅ User registered successfully:', user.uid);
                 
-              } else if (authMode === 'login') {
+            } else if (authMode === 'login') {
                 // Sign in with Firebase Auth
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
@@ -1068,14 +1071,14 @@
                   setUserCoins(existingUser.userCoins);
                   setPlants(existingUser.plants);
                   setCurrentTheme(existingUser.userTheme);
-                  setIsAuthenticated(true);
-                  
+                setIsAuthenticated(true);
+                
                   if (!existingUser.plants || existingUser.plants.length === 0) {
                     initializeGarden(existingUser);
-                  }
+                }
                   
                   console.log('✅ User logged in successfully:', user.uid);
-                } else {
+              } else {
                   console.error('User data not found in Firestore');
                   alert('User data not found. Please contact support.');
                 }
@@ -1555,6 +1558,30 @@
           // Tab navigation state
           const [activeTab, setActiveTab] = useState('tasks');
 
+          // Handle Stripe payment success/cancel
+          useEffect(() => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const donation = urlParams.get('donation');
+            const amount = urlParams.get('amount');
+
+            if (donation === 'success' && amount) {
+              // Payment was successful
+              alert(`🎉 Thank you for your donation of $${amount}! Your support helps keep PROJECT:Echo running.`);
+              
+              // Give bonus coins as a thank you (optional)
+              setUserCoins(prev => prev + (parseInt(amount) * 10));
+              
+              // Clean up URL
+              window.history.replaceState({}, document.title, window.location.pathname);
+            } else if (donation === 'cancelled') {
+              // Payment was cancelled
+              alert('💙 No worries! Thank you for considering a donation to support PROJECT:Echo.');
+              
+              // Clean up URL
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
+          }, []);
+
           // Manual save function
           const manualSave = async () => {
             if (!currentUser || !currentUser.uid) {
@@ -1662,13 +1689,13 @@
               }
               
               // Clear local state
-              setIsAuthenticated(false);
-              setCurrentUser(null);
-              setTasks([]);
-              setPlants([]);
-              setUserCoins(0);
-              setOwnedItems([]);
-              setCurrentTheme('default');
+            setIsAuthenticated(false);
+            setCurrentUser(null);
+            setTasks([]);
+            setPlants([]);
+            setUserCoins(0);
+            setOwnedItems([]);
+            setCurrentTheme('default');
               setSaveStatus('saved');
               
               console.log('✅ User logged out successfully');
@@ -1856,21 +1883,48 @@
           // Donation function
           const handleDonation = async () => {
             try {
-              const stripe = Stripe('pk_test_51Rvuuc3bHJKA1SJwlKDVDaUogCMDrEHvSgleYLxsBHdXXoLiE5xEdmCLtcFggmNCCZk8s2AUN1jOzAaAYntPh2oF00MtslSllT');
-              
-              // Create a simple payment intent (in a real app, this would be done on your server)
-              alert(`Thank you for considering a donation of $${donationAmount}! 
-              
-In a real implementation, this would redirect to Stripe Checkout. 
-For this demo, we'll just give you some bonus coins! 🎉`);
-              
-              // Give bonus coins as a thank you
-              setUserCoins(prev => prev + (donationAmount * 10));
-              setShowDonateModal(false);
+              if (!window.stripe) {
+                throw new Error('Stripe not loaded');
+              }
+
+              // Create checkout session on backend
+              const response = await fetch('/api/payments/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  amount: donationAmount,
+                  userEmail: currentUser?.email || null,
+                  userName: currentUser?.displayName || currentUser?.name || null
+                })
+              });
+
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to create checkout session');
+              }
+
+              const { sessionId, url } = await response.json();
+
+              // Redirect to Stripe Checkout
+              if (url) {
+                // Direct redirect to Stripe Checkout
+                window.location.href = url;
+              } else {
+                // Fallback using Stripe.js redirectToCheckout
+                const result = await window.stripe.redirectToCheckout({
+                  sessionId: sessionId,
+                });
+
+                if (result.error) {
+                  throw new Error(result.error.message);
+                }
+              }
               
             } catch (error) {
               console.error('Donation error:', error);
-              alert('Thank you for the thought! Donation system is in demo mode.');
+              alert(`Error processing donation: ${error.message}\n\nPlease try again or contact support.`);
             }
           };
 
@@ -2951,7 +3005,7 @@ For this demo, we'll just give you some bonus coins! 🎉`);
                 {/* Tasks & Goals Tab */}
                 {activeTab === 'tasks' && (
                   <>
-                    {/* Welcome Message for New Users */}
+                {/* Welcome Message for New Users */}
                 {tasks.some(task => task.isStarterTask && !task.completed) && (
                   <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-md p-6 mb-6 border border-purple-200">
                     <div className="flex items-start gap-3">

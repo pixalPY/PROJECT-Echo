@@ -13,6 +13,7 @@ const firebaseAuthRoutes = require('./routes/firebase-auth');
 const firebaseTaskRoutes = require('./routes/firebase-tasks');
 const firebaseUserRoutes = require('./routes/firebase-users');
 const userRegistrationRoutes = require('./routes/user-registration');
+const stripePaymentRoutes = require('./routes/stripe-payments');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -26,7 +27,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com", "https://cdn.tailwindcss.com", "https://js.stripe.com", "https://www.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://identitytoolkit.googleapis.com", "https://firestore.googleapis.com", "https://securetoken.googleapis.com"],
+      connectSrc: ["'self'", "https://identitytoolkit.googleapis.com", "https://firestore.googleapis.com", "https://securetoken.googleapis.com", "https://api.stripe.com"],
       fontSrc: ["'self'", "https:", "data:"],
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
@@ -80,6 +81,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', firebaseAuthRoutes);
 app.use('/api/tasks', firebaseTaskRoutes);
 app.use('/api/users', firebaseUserRoutes);
+app.use('/api/payments', stripePaymentRoutes);
 app.use('/api', userRegistrationRoutes);
 
 // API documentation endpoint
