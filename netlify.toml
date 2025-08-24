@@ -1,0 +1,29 @@
+[build]
+  # No build command needed - we're serving static HTML
+  command = ""
+  # Publish the root directory since index.html is there
+  publish = "."
+
+[build.environment]
+  # Disable npm install since we don't need it for static HTML
+  NPM_FLAGS = "--no-optional"
+
+[[redirects]]
+  # Redirect all routes to index.html for single-page app behavior
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = false
+  minify = false
+
+[build.processing.js]
+  bundle = false
+  minify = false
+
+[build.processing.html]
+  pretty_urls = true

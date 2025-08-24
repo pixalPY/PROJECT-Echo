@@ -4,9 +4,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Production builds
+# Production builds (not needed for static HTML)
 /build
 /dist
+
+# Netlify
+.netlify/
 
 # Environment variables
 .env

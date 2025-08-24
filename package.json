@@ -1,38 +1,26 @@
 {
   "name": "project-echo-v2",
   "version": "1.0.0",
-  "description": "Advanced task management & productivity app",
-  "main": "index.js",
+  "description": "Advanced task management & productivity app with Firebase integration",
+  "main": "index.html",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "echo 'Open index.html in your browser'",
+    "build": "echo 'No build required - static HTML app'",
+    "serve": "python -m http.server 8000 || php -S localhost:8000"
   },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "lucide-react": "^0.263.1",
-    "axios": "^1.6.0"
+  "keywords": [
+    "task-management",
+    "productivity",
+    "firebase",
+    "javascript",
+    "html",
+    "static-site"
+  ],
+  "author": "pixalPY",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixalPY/PROJECT-Echo.git"
   },
-  "devDependencies": {
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "homepage": "https://github.com/pixalPY/PROJECT-Echo"
 }
