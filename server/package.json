@@ -1,0 +1,35 @@
+{
+  "name": "project-echo-backend",
+  "version": "1.0.0",
+  "description": "Backend API for PROJECT:Echo task management app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node firebase-server.js",
+    "dev": "nodemon firebase-server.js",
+    "start:sqlite": "node server.js",
+    "dev:sqlite": "nodemon server.js",
+    "init-db": "node scripts/initDatabase.js",
+    "setup": "node scripts/setup.js",
+    "postinstall": "node scripts/setup.js"
+  },
+  "keywords": [
+    "task-management",
+    "productivity",
+    "api"
+  ],
+  "author": "PROJECT:Echo Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.10.0",
+    "express-validator": "^7.0.1",
+    "firebase": "^10.7.1",
+    "firebase-admin": "^11.11.1",
+    "helmet": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

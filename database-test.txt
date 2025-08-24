@@ -1,0 +1,135 @@
+DATABASE TEST FILE - PROJECTECHO-791FB
+======================================
+
+This file contains test queries and scenarios for the Project Echo V2 database.
+Firebase Project ID: projectecho-791fb
+Firebase Console: https://console.firebase.google.com/project/projectecho-791fb
+Firestore Database: https://console.firebase.google.com/project/projectecho-791fb/firestore
+
+## Database Connection Test - PROJECTECHO-791FB
+- Test Firebase connection to projectecho-791fb
+- Verify Firestore database accessibility
+- Check authentication setup
+- Verify all required collections exist:
+  * users/{userId}
+  * users/{userId}/tasks/{taskId}
+  * users/{userId}/plants/{plantId}
+  * users/{userId}/inventory/{itemId}
+  * users/{userId}/healthData/{date}
+
+## User Operations Test - UserLOGININFORMATION Integration
+1. CREATE USER
+   - Test user registration via POST /api/auth/register
+   - Verify user saved to Firebase Authentication
+   - Check user profile created in users/{userId} collection
+   - Verify login credentials saved to UserLOGININFORMATION collection
+   - Check initial plant creation
+
+2. LOGIN USER
+   - Test custom login via POST /api/auth/custom-login
+   - Verify authentication against UserLOGININFORMATION collection
+   - Check password validation (plain text comparison)
+   - Verify lastLogin timestamp update
+   - Test invalid credentials rejection
+
+3. READ USER
+   - Test user profile retrieval
+   - Verify user permissions
+   - Check data from users/{userId} collection
+
+4. UPDATE USER
+   - Test profile updates
+   - Verify email changes
+   - Check password changes in UserLOGININFORMATION
+
+5. DELETE USER
+   - Test user deletion from Firebase Auth
+   - Verify UserLOGININFORMATION cleanup
+   - Check cascade operations for user data
+
+## Task Operations Test
+1. CREATE TASK
+   - Test task creation
+   - Verify user association
+   - Check required fields
+
+2. READ TASKS
+   - Test task retrieval by user
+   - Verify filtering options
+   - Check sorting functionality
+
+3. UPDATE TASK
+   - Test task status updates
+   - Verify task modifications
+   - Check completion tracking
+
+4. DELETE TASK
+   - Test task deletion
+   - Verify user permissions
+   - Check data cleanup
+
+## Firebase Integration Test (if using Firebase)
+- Test Firestore connection
+- Verify authentication service
+- Check real-time updates
+- Test offline capabilities
+
+## Performance Test
+- Test with multiple concurrent users
+- Verify response times
+- Check memory usage
+- Test data pagination
+
+## Security Test
+- Test SQL injection prevention
+- Verify authentication tokens
+- Check authorization levels
+- Test data encryption
+
+## Error Handling Test
+- Test invalid inputs
+- Verify error messages
+- Check graceful failures
+- Test recovery scenarios
+
+## Sample Test Data - UserLOGININFORMATION
+Users in UserLOGININFORMATION collection:
+- Email: test_user_1@example.com, Password: TestPass123!
+- Email: test_user_2@example.com, Password: TestPass456!
+- Email: testuser@projectecho.com, Password: TestPassword123!
+
+API Endpoints:
+- POST /api/auth/register - Create new user account
+- POST /api/auth/custom-login - Login using UserLOGININFORMATION
+- GET /api/auth/profile - Get user profile (requires Firebase token)
+
+Tasks:
+- Task 1: "Complete database setup"
+- Task 2: "Test user authentication with UserLOGININFORMATION"
+- Task 3: "Implement task CRUD operations"
+- Task 4: "Test login persistence"
+
+## Test Results Log - PROJECTECHO-791FB
+Date: ___________
+Tester: ___________
+Project: projectecho-791fb
+
+Firebase Connection: [ PASS / FAIL ]
+Firestore Access: [ PASS / FAIL ]
+Authentication: [ PASS / FAIL ]
+User CRUD: [ PASS / FAIL ]
+Task CRUD: [ PASS / FAIL ]
+Security Rules: [ PASS / FAIL ]
+Real-time Updates: [ PASS / FAIL ]
+Performance: [ PASS / FAIL ]
+
+Firebase Console URLs:
+- Main Console: https://console.firebase.google.com/project/projectecho-791fb
+- Firestore: https://console.firebase.google.com/project/projectecho-791fb/firestore
+- Authentication: https://console.firebase.google.com/project/projectecho-791fb/authentication
+- Settings: https://console.firebase.google.com/project/projectecho-791fb/settings/general
+
+Notes:
+_________________________________
+_________________________________
+_________________________________

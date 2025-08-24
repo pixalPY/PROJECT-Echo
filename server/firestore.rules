@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can only access their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // User's tasks subcollection
+      match /tasks/{taskId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      
+      // User's plants subcollection
+      match /plants/{plantId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      
+      // User's inventory subcollection
+      match /inventory/{itemId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      
+      // User's health data subcollection
+      match /healthData/{date} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+        // Validate date format
+        allow write: if request.auth != null && 
+                        request.auth.uid == userId &&
+                        date.matches('^\\d{4}-\\d{2}-\\d{2}$');
+      }
+    }
+    
+    // Global read-only collections (if needed for shared data)
+    match /items/{itemId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only admins can write (via server)
+    }
+    
+    match /themes/{themeId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only admins can write (via server)
+    }
+    
+    // Admin-only collections
+    match /admin/{document=**} {
+      allow read, write: if request.auth != null && 
+                            request.auth.token.admin == true;
+    }
+    
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

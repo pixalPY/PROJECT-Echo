@@ -1,0 +1,2718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT:Echo - Complete Version</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE2IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIGZpbGwtb3BhY2l0eT0iMC4zIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjEyIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbC1vcGFjaXR5PSIwLjIiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iOCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSI0IiBmaWxsPSJ3aGl0ZSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudDBfbGluZWFyXzFfMSIgeDE9IjAiIHkxPSIwIiB4Mj0iNDAiIHkyPSI0MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNzc3N0ZGIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzU1NTVERiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=" />
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
+        .animate-bounce { animation: bounce 1s infinite; }
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+            40%, 43% { transform: translate3d(0,-30px,0); }
+            70% { transform: translate3d(0,-15px,0); }
+            90% { transform: translate3d(0,-4px,0); }
+        }
+        
+        /* Custom Theme Styles */
+        .theme-dark-bg { 
+            background: linear-gradient(to bottom right, #121212, #1a1a1a); 
+            min-height: 100vh;
+        }
+        .theme-dark-header { 
+            background-color: #121212 !important; 
+            border-color: #333 !important; 
+            color: #ffffff !important;
+        }
+        .theme-dark-card { 
+            background-color: #1e1e1e !important; 
+            color: #ffffff !important; 
+            border-color: #333 !important; 
+        }
+        .theme-dark-text { color: #ffffff !important; }
+        .theme-dark-accent { color: #FFD700 !important; }
+        
+        .theme-forest-bg { 
+            background: linear-gradient(to bottom right, #228B22, #2F4F2F); 
+            min-height: 100vh;
+        }
+        .theme-forest-header { 
+            background-color: #228B22 !important; 
+            color: #E6FFE6 !important;
+        }
+        .theme-forest-card { 
+            background-color: #2F4F2F !important; 
+            color: #E6FFE6 !important; 
+            border-color: #A0522D !important; 
+        }
+        .theme-forest-text { color: #E6FFE6 !important; }
+        .theme-forest-accent { color: #A0522D !important; }
+        
+        .theme-ocean-bg { 
+            background: linear-gradient(to bottom right, #1E90FF, #4169E1); 
+            min-height: 100vh;
+        }
+        .theme-ocean-header { 
+            background-color: #1E90FF !important; 
+            color: #ffffff !important;
+        }
+        .theme-ocean-card { 
+            background-color: #4682B4 !important; 
+            color: #ffffff !important; 
+            border-color: #00CED1 !important; 
+        }
+        .theme-ocean-text { color: #ffffff !important; }
+        .theme-ocean-accent { color: #00CED1 !important; }
+        
+        .theme-sunset-bg { 
+            background: linear-gradient(to bottom right, #FF4500, #FF6347); 
+            min-height: 100vh;
+        }
+        .theme-sunset-header { 
+            background-color: #FF4500 !important; 
+            color: #FFF8DC !important;
+        }
+        .theme-sunset-card { 
+            background-color: #CD5C5C !important; 
+            color: #FFF8DC !important; 
+            border-color: #FFD700 !important; 
+        }
+        .theme-sunset-text { color: #FFF8DC !important; }
+        .theme-sunset-accent { color: #FFD700 !important; }
+        
+        .theme-space-bg { 
+            background: linear-gradient(to bottom right, #2B2D42, #1a1a2e); 
+            min-height: 100vh;
+        }
+        .theme-space-header { 
+            background-color: #2B2D42 !important; 
+            color: #ffffff !important;
+        }
+        .theme-space-card { 
+            background-color: #16213e !important; 
+            color: #ffffff !important; 
+            border-color: #8D99AE !important; 
+        }
+        .theme-space-text { color: #ffffff !important; }
+        .theme-space-accent { color: #8D99AE !important; }
+        
+        /* Decoration size scaling */
+        .decor-size-1 { font-size: 0.75rem; } /* Small 1x1 */
+        .decor-size-2 { font-size: 1.5rem; }  /* Medium 2x2 */
+        .decor-size-3 { font-size: 2.25rem; } /* Large 3x3 */
+        
+        /* Ensure modal backgrounds don't show white */
+        .modal-content { background-color: inherit !important; }
+        .bg-white { background-color: white; }
+        
+        /* Theme overrides for modals and white backgrounds */
+        .theme-dark-bg .bg-white { background-color: #1e1e1e !important; color: #ffffff !important; }
+        .theme-forest-bg .bg-white { background-color: #2F4F2F !important; color: #E6FFE6 !important; }
+        .theme-ocean-bg .bg-white { background-color: #4682B4 !important; color: #ffffff !important; }
+        .theme-sunset-bg .bg-white { background-color: #CD5C5C !important; color: #FFF8DC !important; }
+        .theme-space-bg .bg-white { background-color: #16213e !important; color: #ffffff !important; }
+        
+        /* Fix text colors on themed backgrounds */
+        .theme-dark-bg .text-gray-800 { color: #ffffff !important; }
+        .theme-forest-bg .text-gray-800 { color: #E6FFE6 !important; }
+        .theme-ocean-bg .text-gray-800 { color: #ffffff !important; }
+        .theme-sunset-bg .text-gray-800 { color: #FFF8DC !important; }
+        .theme-space-bg .text-gray-800 { color: #ffffff !important; }
+        
+        .theme-dark-bg .text-gray-600 { color: #cccccc !important; }
+        .theme-forest-bg .text-gray-600 { color: #B3E6B3 !important; }
+        .theme-ocean-bg .text-gray-600 { color: #E0F6FF !important; }
+        .theme-sunset-bg .text-gray-600 { color: #F5F5DC !important; }
+        .theme-space-bg .text-gray-600 { color: #cccccc !important; }
+        
+        /* Fix more text colors for better visibility */
+        .theme-dark-bg .text-gray-500 { color: #b3b3b3 !important; }
+        .theme-forest-bg .text-gray-500 { color: #A3D9A3 !important; }
+        .theme-ocean-bg .text-gray-500 { color: #D0E6FF !important; }
+        .theme-sunset-bg .text-gray-500 { color: #F0F0DC !important; }
+        .theme-space-bg .text-gray-500 { color: #b3b3b3 !important; }
+        
+        /* Fix input fields on dark themes */
+        .theme-dark-bg input, .theme-dark-bg select, .theme-dark-bg textarea {
+            background-color: #2a2a2a !important;
+            color: #ffffff !important;
+            border-color: #555 !important;
+        }
+        .theme-dark-bg input::placeholder {
+            color: #888 !important;
+        }
+        
+        .theme-forest-bg input, .theme-forest-bg select, .theme-forest-bg textarea {
+            background-color: #1F3F1F !important;
+            color: #E6FFE6 !important;
+            border-color: #556B2F !important;
+        }
+        .theme-forest-bg input::placeholder {
+            color: #A0C4A0 !important;
+        }
+        
+        .theme-ocean-bg input, .theme-ocean-bg select, .theme-ocean-bg textarea {
+            background-color: #2F5F8F !important;
+            color: #ffffff !important;
+            border-color: #4682B4 !important;
+        }
+        .theme-ocean-bg input::placeholder {
+            color: #B0D4FF !important;
+        }
+        
+        .theme-sunset-bg input, .theme-sunset-bg select, .theme-sunset-bg textarea {
+            background-color: #8B4B4B !important;
+            color: #FFF8DC !important;
+            border-color: #CD853F !important;
+        }
+        .theme-sunset-bg input::placeholder {
+            color: #E0D0A0 !important;
+        }
+        
+        .theme-space-bg input, .theme-space-bg select, .theme-space-bg textarea {
+            background-color: #1a1a2e !important;
+            color: #ffffff !important;
+            border-color: #444 !important;
+        }
+        .theme-space-bg input::placeholder {
+            color: #888 !important;
+        }
+        
+        /* Fix completed task styling */
+        .theme-dark-bg .line-through { 
+            text-decoration-color: #888 !important;
+            opacity: 0.7;
+        }
+        .theme-forest-bg .line-through { 
+            text-decoration-color: #A0522D !important;
+            opacity: 0.7;
+        }
+        .theme-ocean-bg .line-through { 
+            text-decoration-color: #87CEEB !important;
+            opacity: 0.7;
+        }
+        .theme-sunset-bg .line-through { 
+            text-decoration-color: #FFD700 !important;
+            opacity: 0.7;
+        }
+        .theme-space-bg .line-through { 
+            text-decoration-color: #888 !important;
+            opacity: 0.7;
+        }
+        
+        /* Fix task background colors */
+        .theme-dark-bg .bg-gray-50 { background-color: #2a2a2a !important; }
+        .theme-forest-bg .bg-gray-50 { background-color: #1F3F1F !important; }
+        .theme-ocean-bg .bg-gray-50 { background-color: #2F5F8F !important; }
+        .theme-sunset-bg .bg-gray-50 { background-color: #8B4B4B !important; }
+        .theme-space-bg .bg-gray-50 { background-color: #1a1a2e !important; }
+        
+        /* Fix hover states */
+        .theme-dark-bg .hover\\:bg-gray-50:hover { background-color: #333 !important; }
+        .theme-forest-bg .hover\\:bg-gray-50:hover { background-color: #2A4F2A !important; }
+        .theme-ocean-bg .hover\\:bg-gray-50:hover { background-color: #3F6F9F !important; }
+        .theme-sunset-bg .hover\\:bg-gray-50:hover { background-color: #9B5B5B !important; }
+        .theme-space-bg .hover\\:bg-gray-50:hover { background-color: #2a2a3e !important; }
+        
+        /* Fix progress bars */
+        .theme-dark-bg .bg-gray-200 { background-color: #444 !important; }
+        .theme-forest-bg .bg-gray-200 { background-color: #3A5F3A !important; }
+        .theme-ocean-bg .bg-gray-200 { background-color: #4F7FAF !important; }
+        .theme-sunset-bg .bg-gray-200 { background-color: #AB6B6B !important; }
+        .theme-space-bg .bg-gray-200 { background-color: #3a3a4e !important; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        // Milestone Achievement Component
+        function MilestoneNotification({ milestone, onClose, theme }) {
+          if (!milestone) return null;
+
+          return (
+            <div className={`fixed top-4 right-4 ${milestone.plantName ? 'bg-emerald-500' : 'bg-green-500'} text-white p-4 rounded-lg shadow-lg z-50 animate-bounce`}>
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{milestone.plantName ? '🌱' : '🏆'}</span>
+                <div>
+                  <div className="font-bold">{milestone.plantName ? 'Plant Milestone!' : 'Milestone Achieved!'}</div>
+                  <div className="text-sm">{milestone.message}</div>
+                  <div className="flex items-center gap-1 mt-1">
+                    <span>🪙</span>
+                    <span>+{milestone.coins} coins earned!</span>
+                  </div>
+                </div>
+                <button onClick={onClose} className={`ml-2 p-1 rounded hover:bg-opacity-20 hover:bg-gray-500 transition-colors ${theme?.textColor || 'text-gray-800'}`}>
+                  ✕
+                </button>
+              </div>
+            </div>
+          );
+        }
+
+        function AuthForm({ authMode, onSubmit }) {
+          const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+          const [selectedGoals, setSelectedGoals] = useState([]);
+          
+          const goalOptions = [
+            { id: 'healthier', label: 'Get healthier', icon: '💪' },
+            { id: 'change', label: 'Change my ways', icon: '🔄' },
+            { id: 'better', label: 'Become a better version of myself', icon: '✨' },
+            { id: 'organized', label: 'Get more organized', icon: '📋' },
+            { id: 'productive', label: 'Increase productivity', icon: '🚀' },
+            { id: 'balance', label: 'Find work-life balance', icon: '⚖️' },
+            { id: 'habits', label: 'Build better habits', icon: '🎯' },
+            { id: 'goals', label: 'Achieve my goals', icon: '🏆' }
+          ];
+          
+          const handleSubmit = () => {
+            if (formData.email && formData.password && (authMode === 'login' || formData.name)) {
+              onSubmit(formData.email, formData.password, formData.name, selectedGoals);
+              setFormData({ name: '', email: '', password: '' });
+              setSelectedGoals([]);
+            }
+          };
+
+          const handleKeyPress = (e) => {
+            if (e.key === 'Enter') {
+              handleSubmit();
+            }
+          };
+
+          const toggleGoal = (goalId) => {
+            setSelectedGoals(prev => 
+              prev.includes(goalId) 
+                ? prev.filter(id => id !== goalId)
+                : [...prev, goalId]
+            );
+          };
+
+          return (
+            <div>
+              <input
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onKeyPress={handleKeyPress}
+                className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onKeyPress={handleKeyPress}
+                className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              
+              {authMode === 'signup' && (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Full Name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    onKeyPress={handleKeyPress}
+                    className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  
+                  <div className="mb-4">
+                    <h3 className="text-base font-semibold text-gray-800 mb-2">What do you want to do with PROJECT:Echo?</h3>
+                    <p className="text-sm text-gray-600 mb-3">Select all that apply - we'll create a personalized starter plan for you:</p>
+                    
+                    <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto border border-gray-200 rounded-lg p-2">
+                      {goalOptions.map(goal => (
+                        <label 
+                          key={goal.id}
+                          className={`flex items-center p-2 rounded-lg border cursor-pointer transition-colors ${
+                            selectedGoals.includes(goal.id)
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedGoals.includes(goal.id)}
+                            onChange={() => toggleGoal(goal.id)}
+                            className="sr-only"
+                          />
+                          <div className={`w-5 h-5 rounded border-2 mr-3 flex items-center justify-center ${
+                            selectedGoals.includes(goal.id)
+                              ? 'border-blue-500 bg-blue-500'
+                              : 'border-gray-300'
+                          }`}>
+                            {selectedGoals.includes(goal.id) && (
+                              <span className="text-white text-xs">✓</span>
+                            )}
+                          </div>
+                          <span className="text-lg mr-3">{goal.icon}</span>
+                          <div className="flex-1">
+                            <span className="text-gray-800 font-medium block">{goal.label}</span>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+              
+              <button
+                onClick={handleSubmit}
+                className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium mb-4"
+              >
+                {authMode === 'login' ? 'Log In' : 'Create Account'}
+              </button>
+            </div>
+          );
+        }
+
+        function PlantGarden({ plants, selectedPlant, onPlantSelect, userCoins, theme }) {
+          const plantStages = {
+            0: { emoji: '🌱', name: 'Seedling', description: 'Just getting started!' },
+            5: { emoji: '🌿', name: 'Sprout', description: 'Growing strong!' },
+            15: { emoji: '🪴', name: 'Young Plant', description: 'Making progress!' },
+            30: { emoji: '🌳', name: 'Tree', description: 'Thriving!' },
+            50: { emoji: '🌸', name: 'Flowering Tree', description: 'Beautiful growth!' },
+            75: { emoji: '🌺', name: 'Blooming Garden', description: 'Magnificent!' }
+          };
+
+          const getCurrentStage = (tasksCompleted) => {
+            const stages = Object.keys(plantStages).map(Number).sort((a, b) => b - a);
+            for (let stage of stages) {
+              if (tasksCompleted >= stage) {
+                return plantStages[stage];
+              }
+            }
+            return plantStages[0];
+          };
+
+          const getPlantMilestones = (tasksCompleted) => {
+            const milestones = [];
+            if (tasksCompleted >= 25) milestones.push('M1');
+            if (tasksCompleted >= 50) milestones.push('M2');
+            if (tasksCompleted >= 75) milestones.push('M3');
+            if (tasksCompleted >= 100) milestones.push('M4');
+            return milestones;
+          };
+
+          return (
+            <div className={`${theme?.cardBg || 'bg-white'} rounded-lg shadow-md p-6`}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className={`text-lg font-semibold ${theme?.textColor || 'text-gray-800'}`}>Your Garden</h3>
+                <div className="flex items-center gap-2 text-amber-600">
+                  <span>🪙</span>
+                  <span className="font-bold">{userCoins}</span>
+                </div>
+              </div>
+              
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {plants.map(plant => {
+                  const stage = getCurrentStage(plant.tasksCompleted);
+                  const milestones = getPlantMilestones(plant.tasksCompleted);
+                  const isSelected = selectedPlant?.id === plant.id;
+                  return (
+                    <div
+                      key={plant.id}
+                      onClick={() => onPlantSelect(plant)}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        isSelected ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-green-300'
+                      }`}
+                    >
+                      <div className="text-center">
+                        <div className="text-4xl mb-2">{stage.emoji}</div>
+                        <div className={`font-semibold ${theme?.textColor || 'text-gray-800'}`}>{plant.name}</div>
+                        <div className={`text-sm ${theme?.textColor || 'text-gray-600'}`}>{stage.name}</div>
+                        <div className={`text-xs ${theme?.textColor || 'text-gray-500'} mt-1 opacity-75`}>{stage.description}</div>
+                        
+                        {/* Plant Milestones */}
+                        {milestones.length > 0 && (
+                          <div className="flex justify-center gap-1 mt-2">
+                            {milestones.map(milestone => (
+                              <span
+                                key={milestone}
+                                className="px-2 py-1 bg-emerald-500 text-white text-xs rounded-full font-bold"
+                                title={`Plant Milestone: ${milestone === 'M1' ? '25' : milestone === 'M2' ? '50' : milestone === 'M3' ? '75' : '100'} tasks`}
+                              >
+                                {milestone}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        
+                        <div className="mt-2 text-sm font-medium text-green-600">
+                          {plant.tasksCompleted} tasks completed
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                          <div
+                            className="bg-green-500 h-2 rounded-full transition-all duration-500"
+                            style={{ width: `${Math.min((plant.tasksCompleted / 100) * 100, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function AITaskSuggestions({ tasks, currentUser, onAddSuggestion, theme }) {
+          const [suggestions, setSuggestions] = useState([]);
+          const [showSuggestions, setShowSuggestions] = useState(false);
+
+          useEffect(() => {
+            generateAISuggestions();
+          }, [tasks]);
+
+          const generateAISuggestions = () => {
+            const now = new Date();
+            const hour = now.getHours();
+            const completedTasks = tasks.filter(t => t.completed);
+            const recentCategories = completedTasks.slice(-10).map(t => t.category).filter(Boolean);
+            
+            let aiSuggestions = [];
+
+            // Time-based suggestions
+            if (hour >= 6 && hour < 9) {
+              aiSuggestions.push({
+                id: 'morning-routine',
+                text: 'Morning meditation or exercise',
+                category: 'Health',
+                priority: 'medium',
+                reason: 'Great start to your day!'
+              });
+            } else if (hour >= 9 && hour < 12) {
+              aiSuggestions.push({
+                id: 'work-focus',
+                text: 'Review and prioritize today\'s work tasks',
+                category: 'Work',
+                priority: 'high',
+                reason: 'Peak productivity hours'
+              });
+            }
+
+            // Pattern-based suggestions
+            if (recentCategories.includes('Work')) {
+              aiSuggestions.push({
+                id: 'work-related',
+                text: 'Follow up on pending work items',
+                category: 'Work',
+                priority: 'medium',
+                reason: 'Based on your recent work activity'
+              });
+            }
+
+            if (recentCategories.includes('Health')) {
+              aiSuggestions.push({
+                id: 'health-continuation',
+                text: 'Continue your health journey with a quick workout',
+                category: 'Health',
+                priority: 'medium',
+                reason: 'Keep up the healthy momentum!'
+              });
+            }
+
+            // Goal-based suggestions
+            if (currentUser?.goals) {
+              currentUser.goals.forEach(goal => {
+                if (goal === 'healthier') {
+                  aiSuggestions.push({
+                    id: 'health-goal',
+                    text: 'Drink 8 glasses of water today',
+                    category: 'Health',
+                    priority: 'medium',
+                    reason: 'Supporting your health goals'
+                  });
+                }
+              });
+            }
+
+            setSuggestions(aiSuggestions.slice(0, 4));
+          };
+
+          if (suggestions.length === 0) return null;
+
+          return (
+            <div className={`${theme?.cardBg || 'bg-gradient-to-r from-purple-50 to-blue-50'} rounded-lg shadow-md p-4 mb-6 border ${theme?.cardBg ? 'border-opacity-30' : 'border-purple-200'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-purple-600">🧠</span>
+                  <h3 className={`text-lg font-semibold ${theme?.textColor || 'text-gray-800'}`}>AI Suggestions</h3>
+                </div>
+                <button
+                  onClick={() => setShowSuggestions(!showSuggestions)}
+                  className="text-purple-600 hover:text-purple-800 transition-colors"
+                >
+                  <span className={`transition-transform ${showSuggestions ? 'rotate-180' : ''}`}>⌄</span>
+                </button>
+              </div>
+              
+              {showSuggestions && (
+                <div className="space-y-2">
+                  {suggestions.map(suggestion => (
+                    <div key={suggestion.id} className={`${theme?.cardBg ? 'bg-opacity-50' : 'bg-white'} rounded-lg p-3 border ${theme?.cardBg ? 'border-opacity-30' : 'border-gray-200 hover:border-purple-300'} transition-colors`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className={`font-medium ${theme?.textColor || 'text-gray-800'}`}>{suggestion.text}</div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              suggestion.priority === 'high' ? 'bg-red-100 text-red-700' :
+                              suggestion.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-green-100 text-green-700'
+                            }`}>
+                              {suggestion.priority}
+                            </span>
+                            <span className={`text-xs ${theme?.textColor ? 'opacity-70' : 'text-gray-500'}`}>{suggestion.reason}</span>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => onAddSuggestion(suggestion)}
+                          className="ml-3 px-3 py-1 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        }
+
+        function ProjectEcho() {
+          // Authentication State
+          const [isAuthenticated, setIsAuthenticated] = useState(false);
+          const [currentUser, setCurrentUser] = useState(null);
+          const [authMode, setAuthMode] = useState('login');
+          const [users, setUsers] = useState([
+            {
+              id: 'test-user',
+              email: 'test@test.com',
+              password: 'test',
+              name: 'Test User',
+              goals: ['healthier', 'organized', 'productive'],
+              tasks: [
+                {
+                  id: 1,
+                  text: 'Welcome to PROJECT:Echo Test Account! 🎉',
+                  completed: true,
+                  createdAt: new Date().toISOString().split('T')[0],
+                  dueDate: new Date().toISOString().split('T')[0],
+                  priority: 'high',
+                  category: 'Personal',
+                  recurring: 'none',
+                  userId: 'test-user'
+                },
+                {
+                  id: 2,
+                  text: 'Test the advanced features',
+                  completed: false,
+                  createdAt: new Date().toISOString().split('T')[0],
+                  dueDate: new Date().toISOString().split('T')[0],
+                  priority: 'medium',
+                  category: 'Personal',
+                  recurring: 'none',
+                  userId: 'test-user'
+                }
+              ],
+                          userCoins: 999999,
+            ownedItems: ['cactus', 'rose', 'sunflower', 'fountain-1', 'fountain-2', 'lantern-1', 'lantern-2', 'lantern-3', 'theme_dark', 'theme_forest'],
+              userTheme: 'default',
+              plants: [
+                {
+                  id: 101,
+                  name: 'Test Garden Rose',
+                  tasksCompleted: 25,
+                  plantedDate: new Date().toISOString(),
+                  type: 'rose'
+                }
+              ],
+              healthData: {},
+              reminders: []
+            }
+          ]);
+          
+          // Task State
+          const [tasks, setTasks] = useState([]);
+          const [newTask, setNewTask] = useState({
+            text: '',
+            dueDate: '',
+            priority: 'medium',
+            category: '',
+            recurring: 'none'
+          });
+          
+          // UI State
+          const [filter, setFilter] = useState('all');
+          const [searchTerm, setSearchTerm] = useState('');
+          const [editingId, setEditingId] = useState(null);
+          const [editTask, setEditTask] = useState({});
+          const [categories] = useState(['Work', 'Personal', 'Shopping', 'Health']);
+          
+          // Plant & Gamification State
+          const [userCoins, setUserCoins] = useState(0);
+          const [plants, setPlants] = useState([]);
+          const [selectedPlant, setSelectedPlant] = useState(null);
+          const [showShop, setShowShop] = useState(false);
+          const [currentMilestone, setCurrentMilestone] = useState(null);
+          const [ownedItems, setOwnedItems] = useState([]);
+          
+          // Advanced Features State
+          const [showFocusMode, setShowFocusMode] = useState(false);
+          const [showHealthTracker, setShowHealthTracker] = useState(false);
+          const [showInventory, setShowInventory] = useState(false);
+          const [showGardenVisualizer, setShowGardenVisualizer] = useState(false);
+          const [healthData, setHealthData] = useState({
+            waterGoal: 2000, // Default 2L in ml
+            waterConsumed: 0,
+            caloriesGoal: 2000,
+            caloriesConsumed: 0,
+            exerciseGoal: 30,
+            exerciseMinutes: 0,
+            sleepGoal: 8,
+            sleepHours: 0
+          });
+          const [gardenGrid, setGardenGrid] = useState(Array(20).fill(null).map(() => Array(20).fill(null)));
+          const [currentTheme, setCurrentTheme] = useState('default');
+          const [focusTimer, setFocusTimer] = useState(25 * 60); // 25 minutes in seconds
+          const [customFocusTime, setCustomFocusTime] = useState(25); // Custom timer in minutes
+          const [isTimerRunning, setIsTimerRunning] = useState(false);
+          const [focusSession, setFocusSession] = useState(0);
+          const [isInFocusMode, setIsInFocusMode] = useState(false);
+          const [isOnBreak, setIsOnBreak] = useState(false);
+          const [breakTimer, setBreakTimer] = useState(5 * 60); // 5 minutes break
+          const [showDonateModal, setShowDonateModal] = useState(false);
+          const [donationAmount, setDonationAmount] = useState(5);
+          
+          // Priority colors
+          const priorityColors = {
+            low: 'bg-green-100 text-green-800 border-green-200',
+            medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+            high: 'bg-red-100 text-red-800 border-red-200'
+          };
+
+          // Authentication Functions
+          const handleAuth = (email, password, name = '', goals = []) => {
+            if (authMode === 'signup') {
+              const newUser = { 
+                id: Date.now(), 
+                email, 
+                password, 
+                name, 
+                goals, 
+                tasks: [],
+                userCoins: 10,
+                ownedItems: [],
+                userTheme: 'default'
+              };
+              setUsers([...users, newUser]);
+              setCurrentUser(newUser);
+              setCurrentTheme(newUser.userTheme || 'default');
+              setIsAuthenticated(true);
+              
+              // Generate starter plan based on selected goals
+              const starterTasks = generateStarterPlan(goals, newUser.id);
+              setTasks(starterTasks);
+              
+              initializeGarden(newUser);
+            } else if (authMode === 'login') {
+              const user = users.find(u => u.email === email && u.password === password);
+              if (user) {
+                setCurrentUser(user);
+                setTasks(user.tasks || []);
+                setOwnedItems(user.ownedItems || []);
+                setUserCoins(user.userCoins || 10);
+                setPlants(user.plants || []);
+                setCurrentTheme(user.userTheme || 'default');
+                setIsAuthenticated(true);
+                
+                if (!user.plants || user.plants.length === 0) {
+                  initializeGarden(user);
+                }
+              } else {
+                alert('Invalid credentials');
+              }
+            }
+          };
+
+          // Generate starter plan based on user goals
+          const generateStarterPlan = (selectedGoals, userId) => {
+            const goalPlans = {
+              healthier: [
+                { text: 'Log your first meal', priority: 'high', category: 'Health' },
+                { text: 'Drink 8 glasses of water today', priority: 'medium', category: 'Health' },
+                { text: 'Take a 15-minute walk', priority: 'medium', category: 'Health' }
+              ],
+              organized: [
+                { text: 'Clean and organize workspace', priority: 'high', category: 'Personal' },
+                { text: 'Create a daily planning routine', priority: 'high', category: 'Personal' }
+              ],
+              productive: [
+                { text: 'List top 3 priorities for this week', priority: 'high', category: 'Work' },
+                { text: 'Eliminate one time-wasting activity', priority: 'medium', category: 'Work' }
+              ]
+            };
+
+            let allTasks = [];
+            const today = new Date();
+
+            selectedGoals.forEach((goalId, index) => {
+              const goalTasks = goalPlans[goalId] || [];
+              goalTasks.forEach((task, taskIndex) => {
+                allTasks.push({
+                  id: Date.now() + index * 1000 + taskIndex,
+                  text: task.text,
+                  completed: false,
+                  createdAt: today.toISOString().split('T')[0],
+                  dueDate: today.toISOString().split('T')[0],
+                  priority: task.priority,
+                  category: task.category,
+                  recurring: 'none',
+                  userId: userId,
+                  isStarterTask: true
+                });
+              });
+            });
+
+            // Add welcome task
+            if (allTasks.length > 0) {
+              allTasks.unshift({
+                id: Date.now() - 1,
+                text: 'Welcome to PROJECT:Echo! Complete this task to earn your first coins 🎉',
+                completed: false,
+                createdAt: today.toISOString().split('T')[0],
+                dueDate: today.toISOString().split('T')[0],
+                priority: 'high',
+                category: 'Personal',
+                recurring: 'none',
+                userId: userId,
+                isStarterTask: true
+              });
+            }
+
+            return allTasks;
+          };
+
+          const handleGuestMode = () => {
+            const guestUser = { id: 'guest', name: 'Guest User', email: 'guest@example.com' };
+            setCurrentUser(guestUser);
+            setIsAuthenticated(true);
+            setUserCoins(10);
+            setCurrentTheme('default');
+            initializeGarden(guestUser);
+          };
+
+          // Initialize user's first plant
+          const initializeGarden = (user) => {
+            const firstPlant = {
+              id: 1,
+              name: 'My First Plant',
+              tasksCompleted: 0,
+              plantedDate: new Date().toISOString()
+            };
+            setPlants([firstPlant]);
+            setSelectedPlant(firstPlant);
+            setUserCoins(10);
+          };
+
+                    // Milestone system
+          const checkMilestones = (completedTasksCount) => {
+            const milestones = [
+              { tasks: 1, message: 'First task completed!', coins: 5 },
+              { tasks: 5, message: '5 tasks completed!', coins: 10 },
+              { tasks: 10, message: '10 tasks completed!', coins: 15 },
+              { tasks: 25, message: '25 tasks completed!', coins: 25 },
+              { tasks: 50, message: '50 tasks completed!', coins: 50 },
+              { tasks: 100, message: '100 tasks completed!', coins: 100 }
+            ];
+            
+            const milestone = milestones.find(m => m.tasks === completedTasksCount);
+            if (milestone) {
+              setCurrentMilestone(milestone);
+              setUserCoins(prev => prev + milestone.coins);
+              setTimeout(() => setCurrentMilestone(null), 5000);
+            }
+          };
+
+          // Plant milestone system
+          const checkPlantMilestones = (plant, oldTasksCompleted, newTasksCompleted) => {
+            const plantMilestones = [
+              { tasks: 25, message: 'M1: Plant Milestone Reached!', coins: 25, level: 'M1' },
+              { tasks: 50, message: 'M2: Plant Milestone Reached!', coins: 50, level: 'M2' },
+              { tasks: 75, message: 'M3: Plant Milestone Reached!', coins: 75, level: 'M3' },
+              { tasks: 100, message: 'M4: Plant Milestone Reached!', coins: 100, level: 'M4' }
+            ];
+            
+            // Check if we've crossed any milestone thresholds
+            for (const milestone of plantMilestones) {
+              if (oldTasksCompleted < milestone.tasks && newTasksCompleted >= milestone.tasks) {
+                const plantMilestone = {
+                  ...milestone,
+                  message: `${milestone.level}: ${plant.name} Milestone!`,
+                  plantName: plant.name
+                };
+                setCurrentMilestone(plantMilestone);
+                setUserCoins(prev => prev + milestone.coins);
+                setTimeout(() => setCurrentMilestone(null), 6000);
+                break; // Only show one milestone at a time
+              }
+            }
+          };
+
+          // Theme Functions
+          const applyTheme = (themeId) => {
+            setCurrentTheme(themeId);
+            
+            // Save theme to current user's profile
+            if (currentUser && currentUser.id !== 'guest') {
+              setUsers(prevUsers => prevUsers.map(user => 
+                user.id === currentUser.id 
+                  ? { ...user, userTheme: themeId }
+                  : user
+              ));
+              setCurrentUser(prev => ({ ...prev, userTheme: themeId }));
+            }
+          };
+
+          const getThemeStyles = (theme) => {
+            const themes = {
+              default: {
+                background: 'bg-gradient-to-br from-blue-50 to-indigo-100',
+                headerBg: 'bg-white',
+                cardBg: 'bg-white',
+                textColor: 'text-gray-800',
+                accentColor: 'text-blue-600'
+              },
+              theme_dark: {
+                background: 'theme-dark-bg',
+                headerBg: 'theme-dark-header',
+                cardBg: 'theme-dark-card',
+                textColor: 'theme-dark-text',
+                accentColor: 'theme-dark-accent'
+              },
+              theme_forest: {
+                background: 'theme-forest-bg',
+                headerBg: 'theme-forest-header',
+                cardBg: 'theme-forest-card',
+                textColor: 'theme-forest-text',
+                accentColor: 'theme-forest-accent'
+              },
+              theme_ocean: {
+                background: 'theme-ocean-bg',
+                headerBg: 'theme-ocean-header',
+                cardBg: 'theme-ocean-card',
+                textColor: 'theme-ocean-text',
+                accentColor: 'theme-ocean-accent'
+              },
+              theme_sunset: {
+                background: 'theme-sunset-bg',
+                headerBg: 'theme-sunset-header',
+                cardBg: 'theme-sunset-card',
+                textColor: 'theme-sunset-text',
+                accentColor: 'theme-sunset-accent'
+              },
+              theme_space: {
+                background: 'theme-space-bg',
+                headerBg: 'theme-space-header',
+                cardBg: 'theme-space-card',
+                textColor: 'theme-space-text',
+                accentColor: 'theme-space-accent'
+              }
+            };
+            return themes[theme] || themes.default;
+          };
+
+          // Focus Mode Functions
+          const startFocusSession = () => {
+            setIsTimerRunning(true);
+            setIsInFocusMode(true);
+            setFocusTimer(customFocusTime * 60);
+          };
+
+          const pauseFocusSession = () => {
+            setIsTimerRunning(false);
+            setIsInFocusMode(false);
+          };
+
+          const startBreak = () => {
+            setIsTimerRunning(true);
+            setIsOnBreak(true);
+            setIsInFocusMode(false);
+            setBreakTimer(5 * 60);
+          };
+
+          const resetFocusTimer = () => {
+            setIsTimerRunning(false);
+            setIsInFocusMode(false);
+            setIsOnBreak(false);
+            setFocusTimer(customFocusTime * 60);
+            setBreakTimer(5 * 60);
+          };
+
+          const completeSession = () => {
+            setFocusSession(prev => prev + 1);
+            setUserCoins(prev => prev + 10); // Reward for completing focus session
+            resetFocusTimer();
+          };
+
+          const completeBreak = () => {
+            setIsOnBreak(false);
+            setIsTimerRunning(false);
+            setBreakTimer(5 * 60);
+          };
+
+          const updateCustomTime = (minutes) => {
+            setCustomFocusTime(Math.max(5, Math.min(120, minutes))); // 5-120 minutes limit
+            if (!isTimerRunning && !isInFocusMode) {
+              setFocusTimer(minutes * 60);
+            }
+          };
+
+          // Health Functions
+          const updateHealthData = (metric, value) => {
+            setHealthData(prev => ({
+              ...prev,
+              [metric]: value
+            }));
+          };
+
+          const addWater = (amount) => {
+            setHealthData(prev => ({
+              ...prev,
+              waterConsumed: Math.min(prev.waterConsumed + amount, prev.waterGoal)
+            }));
+          };
+
+          const adjustWaterGoal = (newGoal) => {
+            setHealthData(prev => ({
+              ...prev,
+              waterGoal: Math.max(1000, Math.min(5000, newGoal)) // 1L to 5L limit
+            }));
+          };
+
+          const addCalories = (amount) => {
+            setHealthData(prev => ({
+              ...prev,
+              caloriesConsumed: Math.min(prev.caloriesConsumed + amount, prev.caloriesGoal + 1000)
+            }));
+          };
+
+          const adjustCaloriesGoal = (newGoal) => {
+            setHealthData(prev => ({
+              ...prev,
+              caloriesGoal: Math.max(1200, Math.min(4000, newGoal))
+            }));
+          };
+
+          const addExercise = (amount) => {
+            setHealthData(prev => ({
+              ...prev,
+              exerciseMinutes: Math.min(prev.exerciseMinutes + amount, prev.exerciseGoal + 120)
+            }));
+          };
+
+          const adjustExerciseGoal = (newGoal) => {
+            setHealthData(prev => ({
+              ...prev,
+              exerciseGoal: Math.max(15, Math.min(180, newGoal))
+            }));
+          };
+
+          const addSleep = (amount) => {
+            setHealthData(prev => ({
+              ...prev,
+              sleepHours: Math.min(prev.sleepHours + amount, prev.sleepGoal + 4)
+            }));
+          };
+
+          const adjustSleepGoal = (newGoal) => {
+            setHealthData(prev => ({
+              ...prev,
+              sleepGoal: Math.max(6, Math.min(12, newGoal))
+            }));
+          };
+
+          // Garden Visualizer Functions
+          const [draggedItem, setDraggedItem] = useState(null);
+          
+          const placePlantInGarden = (row, col, item) => {
+            if (item && ((item.tasksCompleted >= 75) || item.type === 'decor')) {
+              const size = item.size || 1;
+              
+              // Check if there's enough space for the item
+              if (row + size > 20 || col + size > 20) return; // Out of bounds
+              
+              // Check if all required slots are empty
+              for (let r = row; r < row + size; r++) {
+                for (let c = col; c < col + size; c++) {
+                  if (gardenGrid[r][c] !== null) return; // Slot occupied
+                }
+              }
+              
+              setGardenGrid(prev => {
+                const newGrid = prev.map(r => [...r]);
+                // Place the item in all required slots
+                for (let r = row; r < row + size; r++) {
+                  for (let c = col; c < col + size; c++) {
+                    newGrid[r][c] = { ...item, isMainCell: r === row && c === col };
+                  }
+                }
+                return newGrid;
+              });
+            }
+          };
+
+          const removePlantFromGarden = (row, col) => {
+            setGardenGrid(prev => {
+              const newGrid = prev.map(r => [...r]);
+              const item = newGrid[row][col];
+              
+              if (item) {
+                const size = item.size || 1;
+                // Remove all cells occupied by this item
+                for (let r = 0; r < 20; r++) {
+                  for (let c = 0; c < 20; c++) {
+                    if (newGrid[r][c] && newGrid[r][c].id === item.id) {
+                      newGrid[r][c] = null;
+                    }
+                  }
+                }
+              }
+              
+              return newGrid;
+            });
+          };
+
+          const handleDragStart = (e, item) => {
+            setDraggedItem(item);
+            e.dataTransfer.effectAllowed = 'move';
+          };
+
+          const handleDragOver = (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+          };
+
+          const handleDrop = (e, row, col) => {
+            e.preventDefault();
+            if (draggedItem) {
+              const size = draggedItem.size || 1;
+              let canPlace = true;
+              
+              // Check if there's enough space
+              if (row + size > 20 || col + size > 20) {
+                canPlace = false;
+              } else {
+                // Check if all required slots are empty
+                for (let r = row; r < row + size && canPlace; r++) {
+                  for (let c = col; c < col + size && canPlace; c++) {
+                    if (gardenGrid[r][c] !== null) {
+                      canPlace = false;
+                    }
+                  }
+                }
+              }
+              
+              if (canPlace) {
+                placePlantInGarden(row, col, draggedItem);
+              }
+            }
+            setDraggedItem(null);
+          };
+
+          // Shop functions
+          const handlePurchase = (item) => {
+            if (userCoins >= item.price) {
+              setUserCoins(prev => prev - item.price);
+              
+              if (item.type === 'theme') {
+                // Themes are still unique - only buy once and apply
+                if (!ownedItems.includes(item.id)) {
+                  setOwnedItems(prev => [...prev, item.id]);
+                }
+                setUserTheme(item.id);
+              } else if (item.type === 'plant') {
+                // Allow multiple plants of the same type
+                const plantCount = plants.filter(p => p.type === item.id).length + 1;
+                const newPlant = {
+                  id: Date.now() + Math.random(), // Ensure unique ID
+                  name: `${item.name} #${plantCount}`,
+                  tasksCompleted: 0,
+                  plantedDate: new Date().toISOString(),
+                  type: item.id,
+                  originalName: item.name
+                };
+                setPlants(prev => [...prev, newPlant]);
+                // Add to owned items each time for inventory tracking
+                setOwnedItems(prev => [...prev, `${item.id}-${Date.now()}`]);
+              } else if (item.type === 'decor') {
+                // Allow multiple decorations of the same type
+                const decorCount = ownedItems.filter(id => id.startsWith(item.id)).length + 1;
+                setOwnedItems(prev => [...prev, `${item.id}-${Date.now()}-${decorCount}`]);
+              }
+              return true;
+            }
+            return false;
+          };
+
+          // AI Suggestions
+          const handleAddSuggestion = (suggestion) => {
+            const newTaskObj = {
+              id: Date.now(),
+              text: suggestion.text,
+              completed: false,
+              createdAt: new Date().toISOString().split('T')[0],
+              dueDate: '',
+              priority: suggestion.priority,
+              category: suggestion.category,
+              recurring: 'none',
+              userId: currentUser.id
+            };
+            setTasks(prev => [...prev, newTaskObj]);
+          };
+
+          const handleLogout = () => {
+            setIsAuthenticated(false);
+            setCurrentUser(null);
+            setTasks([]);
+            setPlants([]);
+            setUserCoins(0);
+            setOwnedItems([]);
+            setCurrentTheme('default');
+          };
+
+          // Task Functions
+          const addTask = () => {
+            if (newTask.text.trim()) {
+              const task = {
+                id: Date.now(),
+                text: newTask.text.trim(),
+                completed: false,
+                createdAt: new Date().toISOString().split('T')[0],
+                dueDate: newTask.dueDate,
+                priority: newTask.priority,
+                category: newTask.category,
+                recurring: newTask.recurring,
+                userId: currentUser.id
+              };
+              setTasks([...tasks, task]);
+              setNewTask({ text: '', dueDate: '', priority: 'medium', category: '', recurring: 'none' });
+            }
+          };
+
+          const toggleTask = (id) => {
+            setTasks(tasks.map(task => {
+              if (task.id === id) {
+                const updatedTask = { ...task, completed: !task.completed };
+                
+                // Award coins and update plant progress when completing a task
+                if (!task.completed && updatedTask.completed) {
+                  const coinReward = task.priority === 'high' ? 10 : task.priority === 'medium' ? 5 : 2;
+                  setUserCoins(prev => prev + coinReward);
+                  
+                  // Update selected plant's progress
+                  if (selectedPlant) {
+                    const oldTasksCompleted = selectedPlant.tasksCompleted;
+                    const newTasksCompleted = oldTasksCompleted + 1;
+                    
+                    setPlants(prev => prev.map(plant => 
+                      plant.id === selectedPlant.id 
+                        ? { ...plant, tasksCompleted: newTasksCompleted }
+                        : plant
+                    ));
+                    setSelectedPlant(prev => ({ ...prev, tasksCompleted: newTasksCompleted }));
+                    
+                    // Check for plant milestones
+                    checkPlantMilestones(selectedPlant, oldTasksCompleted, newTasksCompleted);
+                  }
+                  
+                  // Check for milestones
+                  const completedTasksCount = tasks.filter(t => t.completed).length + 1;
+                  checkMilestones(completedTasksCount);
+                }
+                
+                return updatedTask;
+              }
+              return task;
+            }));
+          };
+
+          const deleteTask = (id) => {
+            setTasks(tasks.filter(task => task.id !== id));
+          };
+
+          const startEditing = (task) => {
+            setEditingId(task.id);
+            setEditTask(task);
+          };
+
+          const saveEdit = () => {
+            setTasks(tasks.map(task => 
+              task.id === editingId ? editTask : task
+            ));
+            setEditingId(null);
+            setEditTask({});
+          };
+
+          const cancelEdit = () => {
+            setEditingId(null);
+            setEditTask({});
+          };
+
+          // Filtering and Search
+          const filteredTasks = tasks.filter(task => {
+            const matchesSearch = task.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                 (task.category && task.category.toLowerCase().includes(searchTerm.toLowerCase()));
+            
+            const today = new Date().toISOString().split('T')[0];
+            const isOverdue = task.dueDate && task.dueDate < today && !task.completed;
+            
+            switch (filter) {
+              case 'active': return !task.completed && matchesSearch;
+              case 'completed': return task.completed && matchesSearch;
+              case 'overdue': return isOverdue && matchesSearch;
+              case 'today': return task.dueDate === today && matchesSearch;
+              case 'high': return task.priority === 'high' && matchesSearch;
+              default: return matchesSearch;
+            }
+          });
+
+          const getTaskStats = () => {
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.completed).length;
+            const overdue = tasks.filter(t => t.dueDate && t.dueDate < new Date().toISOString().split('T')[0] && !t.completed).length;
+            const today = tasks.filter(t => t.dueDate === new Date().toISOString().split('T')[0]).length;
+            return { total, completed, overdue, today };
+          };
+
+          const stats = getTaskStats();
+
+          // Timer effect for focus mode and breaks
+          useEffect(() => {
+            let interval = null;
+            if (isTimerRunning) {
+              interval = setInterval(() => {
+                if (isOnBreak) {
+                  setBreakTimer(timer => {
+                    if (timer <= 1) {
+                      completeBreak();
+                      return 5 * 60;
+                    }
+                    return timer - 1;
+                  });
+                } else {
+                  setFocusTimer(timer => {
+                    if (timer <= 1) {
+                      completeSession();
+                      return customFocusTime * 60;
+                    }
+                    return timer - 1;
+                  });
+                }
+              }, 1000);
+            }
+            return () => clearInterval(interval);
+          }, [isTimerRunning, isOnBreak, customFocusTime]);
+
+          // Format timer display
+          const formatTime = (seconds) => {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+          };
+
+          // Helper function to check if buttons should be disabled during focus mode
+          const isButtonDisabled = isInFocusMode && !showFocusMode;
+          
+          // Get current theme styles (moved inside component)
+          const currentThemeStyles = getThemeStyles(currentTheme || 'default');
+
+          // Donation function
+          const handleDonation = async () => {
+            try {
+              const stripe = Stripe('pk_test_51Rvuuc3bHJKA1SJwlKDVDaUogCMDrEHvSgleYLxsBHdXXoLiE5xEdmCLtcFggmNCCZk8s2AUN1jOzAaAYntPh2oF00MtslSllT');
+              
+              // Create a simple payment intent (in a real app, this would be done on your server)
+              alert(`Thank you for considering a donation of $${donationAmount}! 
+              
+In a real implementation, this would redirect to Stripe Checkout. 
+For this demo, we'll just give you some bonus coins! 🎉`);
+              
+              // Give bonus coins as a thank you
+              setUserCoins(prev => prev + (donationAmount * 10));
+              setShowDonateModal(false);
+              
+            } catch (error) {
+              console.error('Donation error:', error);
+              alert('Thank you for the thought! Donation system is in demo mode.');
+            }
+          };
+
+          // Authentication UI
+          if (!isAuthenticated) {
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 py-8">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg max-h-[95vh] overflow-y-auto">
+                  <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-800 mb-2">PROJECT:Echo</h1>
+                    <p className="text-gray-600">Advanced task management & productivity</p>
+                  </div>
+
+                  <div className="flex gap-2 mb-6">
+                    {['login', 'signup'].map(mode => (
+                      <button
+                        key={mode}
+                        onClick={() => setAuthMode(mode)}
+                        className={`flex-1 py-2 px-4 rounded-lg capitalize font-medium transition-colors ${
+                          authMode === mode 
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        {mode === 'login' ? 'Log In' : 'Sign Up'}
+                      </button>
+                    ))}
+                  </div>
+
+                  <AuthForm authMode={authMode} onSubmit={handleAuth} />
+
+                  <button
+                    onClick={handleGuestMode}
+                    className="w-full py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium mb-4"
+                  >
+                    Continue as Guest
+                  </button>
+                  
+                  {/* Test Account Info */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-amber-500">🪙</span>
+                      <span className="font-semibold text-blue-800">Test Account Available!</span>
+                    </div>
+                    <div className="text-sm text-blue-700 space-y-1">
+                      <div><strong>Email:</strong> test@test.com</div>
+                      <div><strong>Password:</strong> test</div>
+                      <div className="flex items-center gap-1 text-amber-600">
+                        <span>🪙</span>
+                        <span className="font-bold">999,999 coins + items unlocked!</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          // Main App UI
+          return (
+            <div className={`min-h-screen ${currentThemeStyles?.background || 'bg-gradient-to-br from-blue-50 to-indigo-100'}`}>
+              {/* Focus Mode Overlay */}
+              {isInFocusMode && (
+                <div className="fixed inset-0 bg-black bg-opacity-60 z-40 flex items-center justify-center">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl p-8 max-w-md mx-4 text-center`}>
+                    <div className="text-6xl mb-4">🎯</div>
+                    <h2 className={`text-2xl font-bold ${currentThemeStyles?.textColor || 'text-gray-800'} mb-2`}>Focus Mode Active</h2>
+                    <div className="text-4xl font-bold text-green-600 mb-4">
+                      {formatTime(focusTimer)}
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+                      <div 
+                        className="bg-green-500 h-3 rounded-full transition-all duration-1000"
+                        style={{ width: `${((customFocusTime * 60 - focusTimer) / (customFocusTime * 60)) * 100}%` }}
+                      ></div>
+                    </div>
+                    <div className="flex gap-3 justify-center">
+                      <button
+                        onClick={pauseFocusSession}
+                        className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+                      >
+                        ⏸️ Pause
+                      </button>
+                      <button
+                        onClick={startBreak}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                      >
+                        ☕ Break (5min)
+                      </button>
+                      <button
+                        onClick={resetFocusTimer}
+                        className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                      >
+                        ⏹️ Reset
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Break Mode Overlay */}
+              {isOnBreak && (
+                <div className="fixed inset-0 bg-blue-900 bg-opacity-60 z-40 flex items-center justify-center">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl p-8 max-w-md mx-4 text-center`}>
+                    <div className="text-6xl mb-4">☕</div>
+                    <h2 className={`text-2xl font-bold ${currentThemeStyles?.textColor || 'text-gray-800'} mb-2`}>Break Time</h2>
+                    <div className="text-4xl font-bold text-blue-600 mb-4">
+                      {formatTime(breakTimer)}
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+                      <div 
+                        className="bg-blue-500 h-3 rounded-full transition-all duration-1000"
+                        style={{ width: `${((5 * 60 - breakTimer) / (5 * 60)) * 100}%` }}
+                      ></div>
+                    </div>
+                    <div className="flex gap-3 justify-center">
+                      <button
+                        onClick={completeBreak}
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                      >
+                        ✅ End Break
+                      </button>
+                      <button
+                        onClick={resetFocusTimer}
+                        className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                      >
+                        ⏹️ Stop Session
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Milestone Notification */}
+              <MilestoneNotification 
+                milestone={currentMilestone} 
+                onClose={() => setCurrentMilestone(null)}
+                theme={currentThemeStyles}
+              />
+              
+              {/* Focus Mode Modal */}
+              {showFocusMode && (
+                <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl w-full max-w-2xl mx-4 p-6`}>
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <span className="text-blue-600 text-2xl">🎯</span>
+                        <h2 className={`text-2xl font-bold ${currentThemeStyles?.textColor || 'text-gray-800'}`}>Focus Mode</h2>
+                      </div>
+                      <button
+                        onClick={() => setShowFocusMode(false)}
+                        className={`p-2 rounded-lg transition-colors ${currentThemeStyles?.textColor || 'text-gray-800'} hover:bg-opacity-20 hover:bg-gray-500`}
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    {/* Timer Customization */}
+                    <div className="mb-6">
+                      <h3 className={`text-lg font-semibold ${currentThemeStyles?.textColor || 'text-gray-800'} mb-3`}>Focus Duration</h3>
+                      <div className="flex items-center justify-center gap-4">
+                        <button
+                          onClick={() => updateCustomTime(customFocusTime - 5)}
+                          disabled={isInFocusMode || isTimerRunning}
+                          className="w-8 h-8 bg-gray-200 hover:bg-gray-300 disabled:opacity-50 rounded-full flex items-center justify-center"
+                        >
+                          -
+                        </button>
+                        <div className="text-center">
+                          <div className={`text-2xl font-bold ${currentThemeStyles?.textColor || 'text-gray-800'}`}>{customFocusTime} min</div>
+                          <div className="text-sm text-gray-500">Focus Time</div>
+                        </div>
+                        <button
+                          onClick={() => updateCustomTime(customFocusTime + 5)}
+                          disabled={isInFocusMode || isTimerRunning}
+                          className="w-8 h-8 bg-gray-200 hover:bg-gray-300 disabled:opacity-50 rounded-full flex items-center justify-center"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-center mb-8">
+                      <div className={`text-6xl font-bold mb-2 ${isTimerRunning && !isOnBreak ? 'text-green-600' : isOnBreak ? 'text-blue-600' : 'text-gray-600'}`}>
+                        {isOnBreak ? formatTime(breakTimer) : formatTime(focusTimer)}
+                      </div>
+                      <div className="text-lg text-gray-600">
+                        {isOnBreak ? 'Break Time (5 min)' : `Focus Time (${customFocusTime} min)`}
+                      </div>
+                      <div className="text-sm text-gray-500 mt-2">Sessions completed: {focusSession}</div>
+                      {(isTimerRunning || isInFocusMode) && (
+                        <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
+                          <div 
+                            className={`h-2 rounded-full transition-all duration-1000 ${isOnBreak ? 'bg-blue-500' : 'bg-green-500'}`}
+                            style={{ 
+                              width: isOnBreak 
+                                ? `${((5 * 60 - breakTimer) / (5 * 60)) * 100}%`
+                                : `${((customFocusTime * 60 - focusTimer) / (customFocusTime * 60)) * 100}%`
+                            }}
+                          ></div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-center gap-3">
+                      {!isInFocusMode && !isOnBreak && !isTimerRunning ? (
+                        <button 
+                          onClick={startFocusSession}
+                          className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            ▶️ Start Focus
+                          </div>
+                        </button>
+                      ) : (
+                        <>
+                          {!isOnBreak && (
+                            <>
+                              <button 
+                                onClick={pauseFocusSession}
+                                className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+                              >
+                                ⏸️ Pause
+                              </button>
+                              <button 
+                                onClick={startBreak}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                              >
+                                ☕ Break
+                              </button>
+                            </>
+                          )}
+                          {isOnBreak && (
+                            <button 
+                              onClick={completeBreak}
+                              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                            >
+                              ✅ End Break
+                            </button>
+                          )}
+                          <button 
+                            onClick={resetFocusTimer}
+                            className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                          >
+                            ⏹️ Reset
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Health Tracker Modal */}
+              {showHealthTracker && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl w-full max-w-4xl max-h-[85vh] overflow-y-auto`}>
+                    <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                      <div>
+                        <h2 className={`text-2xl font-bold ${currentThemeStyles?.textColor || 'text-gray-800'}`}>Health Tracker</h2>
+                        <div className={`text-sm ${currentThemeStyles?.textColor ? 'opacity-70' : 'text-gray-600'} mt-1`}>Track your daily health metrics and earn coins!</div>
+                      </div>
+                      <button
+                        onClick={() => setShowHealthTracker(false)}
+                        className={`p-2 rounded-lg transition-colors ${currentThemeStyles?.textColor || 'text-gray-800'} hover:bg-opacity-20 hover:bg-gray-500`}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    
+                    <div className="p-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span className="text-red-500">🍎</span>
+                              <h3 className={`font-semibold ${currentThemeStyles?.textColor || 'text-gray-800'}`}>Calories</h3>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => adjustCaloriesGoal(healthData.caloriesGoal - 200)}
+                                className="w-6 h-6 bg-red-200 hover:bg-red-300 rounded-full flex items-center justify-center text-xs"
+                              >
+                                -
+                              </button>
+                              <span className={`text-xs ${currentThemeStyles?.textColor ? 'opacity-70' : 'text-gray-600'}`}>{healthData.caloriesGoal}</span>
+                              <button
+                                onClick={() => adjustCaloriesGoal(healthData.caloriesGoal + 200)}
+                                className="w-6 h-6 bg-red-200 hover:bg-red-300 rounded-full flex items-center justify-center text-xs"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="text-2xl font-bold text-gray-800 mb-2">
+                            {healthData.caloriesConsumed} / {healthData.caloriesGoal}
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
+                            <div 
+                              className="bg-red-500 h-3 rounded-full transition-all duration-300" 
+                              style={{ width: `${Math.min((healthData.caloriesConsumed / healthData.caloriesGoal) * 100, 100)}%` }}
+                            ></div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => addCalories(100)}
+                              className="flex-1 px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+                            >
+                              +100
+                            </button>
+                            <button
+                              onClick={() => addCalories(250)}
+                              className="flex-1 px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+                            >
+                              +250
+                            </button>
+                            <button
+                              onClick={() => addCalories(500)}
+                              className="flex-1 px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+                            >
+                              +500
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span className="text-blue-500">💧</span>
+                              <h3 className="font-semibold text-gray-800">Water</h3>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => adjustWaterGoal(healthData.waterGoal - 500)}
+                                className="w-6 h-6 bg-blue-200 hover:bg-blue-300 rounded-full flex items-center justify-center text-xs"
+                              >
+                                -
+                              </button>
+                              <span className="text-xs text-gray-600">{healthData.waterGoal/1000}L</span>
+                              <button
+                                onClick={() => adjustWaterGoal(healthData.waterGoal + 500)}
+                                className="w-6 h-6 bg-blue-200 hover:bg-blue-300 rounded-full flex items-center justify-center text-xs"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="text-2xl font-bold text-gray-800 mb-2">
+                            {healthData.waterConsumed}ml / {healthData.waterGoal}ml
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
+                            <div 
+                              className="bg-blue-500 h-3 rounded-full transition-all duration-300" 
+                              style={{ width: `${Math.min((healthData.waterConsumed / healthData.waterGoal) * 100, 100)}%` }}
+                            ></div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => addWater(250)}
+                              className="flex-1 px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                            >
+                              +250ml
+                            </button>
+                            <button
+                              onClick={() => addWater(500)}
+                              className="flex-1 px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                            >
+                              +500ml
+                            </button>
+                            <button
+                              onClick={() => addWater(1000)}
+                              className="flex-1 px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                            >
+                              +1L
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span className="text-green-500">🏋️</span>
+                              <h3 className="font-semibold text-gray-800">Exercise</h3>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => adjustExerciseGoal(healthData.exerciseGoal - 15)}
+                                className="w-6 h-6 bg-green-200 hover:bg-green-300 rounded-full flex items-center justify-center text-xs"
+                              >
+                                -
+                              </button>
+                              <span className="text-xs text-gray-600">{healthData.exerciseGoal}min</span>
+                              <button
+                                onClick={() => adjustExerciseGoal(healthData.exerciseGoal + 15)}
+                                className="w-6 h-6 bg-green-200 hover:bg-green-300 rounded-full flex items-center justify-center text-xs"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="text-2xl font-bold text-gray-800 mb-2">
+                            {healthData.exerciseMinutes} / {healthData.exerciseGoal} minutes
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
+                            <div 
+                              className="bg-green-500 h-3 rounded-full transition-all duration-300" 
+                              style={{ width: `${Math.min((healthData.exerciseMinutes / healthData.exerciseGoal) * 100, 100)}%` }}
+                            ></div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => addExercise(10)}
+                              className="flex-1 px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600"
+                            >
+                              +10min
+                            </button>
+                            <button
+                              onClick={() => addExercise(20)}
+                              className="flex-1 px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600"
+                            >
+                              +20min
+                            </button>
+                            <button
+                              onClick={() => addExercise(30)}
+                              className="flex-1 px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600"
+                            >
+                              +30min
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span className="text-purple-500">🌙</span>
+                              <h3 className="font-semibold text-gray-800">Sleep</h3>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => adjustSleepGoal(healthData.sleepGoal - 1)}
+                                className="w-6 h-6 bg-purple-200 hover:bg-purple-300 rounded-full flex items-center justify-center text-xs"
+                              >
+                                -
+                              </button>
+                              <span className="text-xs text-gray-600">{healthData.sleepGoal}h</span>
+                              <button
+                                onClick={() => adjustSleepGoal(healthData.sleepGoal + 1)}
+                                className="w-6 h-6 bg-purple-200 hover:bg-purple-300 rounded-full flex items-center justify-center text-xs"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="text-2xl font-bold text-gray-800 mb-2">
+                            {healthData.sleepHours} / {healthData.sleepGoal} hours
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
+                            <div 
+                              className="bg-purple-500 h-3 rounded-full transition-all duration-300" 
+                              style={{ width: `${Math.min((healthData.sleepHours / healthData.sleepGoal) * 100, 100)}%` }}
+                            ></div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => addSleep(1)}
+                              className="flex-1 px-2 py-1 bg-purple-500 text-white rounded text-xs hover:bg-purple-600"
+                            >
+                              +1h
+                            </button>
+                            <button
+                              onClick={() => addSleep(2)}
+                              className="flex-1 px-2 py-1 bg-purple-500 text-white rounded text-xs hover:bg-purple-600"
+                            >
+                              +2h
+                            </button>
+                            <button
+                              onClick={() => addSleep(0.5)}
+                              className="flex-1 px-2 py-1 bg-purple-500 text-white rounded text-xs hover:bg-purple-600"
+                            >
+                              +30min
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Shop Modal */}
+              {showShop && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl w-full max-w-6xl max-h-[85vh] overflow-y-auto`}>
+                    <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-2xl font-bold text-gray-800">Garden Shop</h2>
+                        <div className="flex items-center gap-2 text-amber-600 mt-1">
+                          <span>🪙</span>
+                          <span className="font-bold">{userCoins} coins available</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setShowShop(false)}
+                        className={`p-2 rounded-lg transition-colors ${currentThemeStyles?.textColor || 'text-gray-800'} hover:bg-opacity-20 hover:bg-gray-500`}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    
+                    <div className="p-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {[
+                          // Plants
+                          { id: 'cactus', name: 'Desert Cactus', price: 25, emoji: '🌵', type: 'plant' },
+                          { id: 'rose', name: 'Rose Bush', price: 35, emoji: '🌹', type: 'plant' },
+                          { id: 'sunflower', name: 'Sunflower', price: 30, emoji: '🌻', type: 'plant' },
+                          { id: 'tulip', name: 'Tulip', price: 28, emoji: '🌷', type: 'plant' },
+                          { id: 'cherry_blossom', name: 'Cherry Blossom', price: 45, emoji: '🌸', type: 'plant' },
+                          { id: 'palm_tree', name: 'Palm Tree', price: 50, emoji: '🌴', type: 'plant' },
+                          { id: 'bamboo', name: 'Bamboo', price: 40, emoji: '🎋', type: 'plant' },
+                          { id: 'lotus', name: 'Lotus', price: 55, emoji: '🪷', type: 'plant' },
+                          // Themes
+                          { id: 'theme_dark', name: 'Dark Theme', price: 20, emoji: '🌙', type: 'theme' },
+                          { id: 'theme_forest', name: 'Forest Theme', price: 25, emoji: '🌲', type: 'theme' },
+                          { id: 'theme_ocean', name: 'Ocean Theme', price: 30, emoji: '🌊', type: 'theme' },
+                          { id: 'theme_sunset', name: 'Sunset Theme', price: 35, emoji: '🌅', type: 'theme' },
+                          { id: 'theme_space', name: 'Space Theme', price: 40, emoji: '🌌', type: 'theme' },
+                          // Decorations - Small (1x1)
+                          { id: 'lantern', name: 'Garden Lantern', price: 60, emoji: '🏮', type: 'decor', size: 1 },
+                          { id: 'bench', name: 'Garden Bench', price: 75, emoji: '🪑', type: 'decor', size: 1 },
+                          { id: 'statue', name: 'Garden Statue', price: 120, emoji: '🗿', type: 'decor', size: 1 },
+                          // Medium Decorations (2x2)
+                          { id: 'fountain', name: 'Garden Fountain', price: 200, emoji: '⛲', type: 'decor', size: 2 },
+                          { id: 'pond', name: 'Koi Pond', price: 180, emoji: '🐠', type: 'decor', size: 2 },
+                          { id: 'pavilion', name: 'Garden Pavilion', price: 250, emoji: '🏯', type: 'decor', size: 2 },
+                          // Large Decorations (3x3)
+                          { id: 'gazebo', name: 'Grand Gazebo', price: 400, emoji: '🏛️', type: 'decor', size: 3 },
+                          { id: 'windmill', name: 'Dutch Windmill', price: 350, emoji: '🌪️', type: 'decor', size: 3 },
+                          { id: 'greenhouse', name: 'Glass Greenhouse', price: 500, emoji: '🏠', type: 'decor', size: 3 }
+                        ].map(item => (
+                          <div key={item.id} className={`border ${currentThemeStyles?.cardBg ? 'border-opacity-30' : 'border-gray-200'} rounded-lg p-4 hover:shadow-md transition-shadow ${currentThemeStyles?.cardBg ? 'bg-opacity-50' : 'bg-white'}`}>
+                            <div className="text-center">
+                              <div className={`mb-3 ${
+                                item.size ? `decor-size-${item.size}` : 'text-4xl'
+                              } ${!item.size ? 'text-4xl' : ''}`}>{item.emoji}</div>
+                              <h4 className="font-semibold text-gray-800 mb-1 text-sm">{item.name}</h4>
+                              {item.size && (
+                                <div className="text-xs text-blue-600 font-medium mb-1">
+                                  Size: {item.size}x{item.size} {item.size === 1 ? '(Small)' : item.size === 2 ? '(Medium)' : '(Large)'}
+                                </div>
+                              )}
+                              {(item.type === 'plant' || item.type === 'decor') && (
+                                <div className="text-xs text-green-600 font-medium mb-1">
+                                  ✨ Can buy multiple!
+                                </div>
+                              )}
+                              <div className="flex items-center justify-center gap-1 text-amber-600 mb-3">
+                                <span>🪙</span>
+                                <span className="font-bold">{item.price}</span>
+                              </div>
+                                                            <button
+                                onClick={() => handlePurchase(item)}
+                                disabled={userCoins < item.price || (item.type === 'theme' && ownedItems.includes(item.id))}
+                                className={`w-full py-2 px-3 rounded-lg font-medium transition-colors text-sm ${
+                                  (item.type === 'theme' && ownedItems.includes(item.id)) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' :
+                                  userCoins >= item.price ? 'bg-green-500 text-white hover:bg-green-600' :
+                                  'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                }`}
+                              >
+                                {(item.type === 'theme' && ownedItems.includes(item.id)) ? 'Owned' : 
+                                 userCoins >= item.price ? 'Purchase' : 'Need more coins'}
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Inventory Modal */}
+              {showInventory && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl w-full max-w-6xl max-h-[85vh] overflow-y-auto`}>
+                    <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-2xl font-bold text-gray-800">Your Inventory</h2>
+                        <div className="text-sm text-gray-600 mt-1">Manage your owned themes, plants, and decorations</div>
+                      </div>
+                      <button
+                        onClick={() => setShowInventory(false)}
+                        className={`p-2 rounded-lg transition-colors ${currentThemeStyles?.textColor || 'text-gray-800'} hover:bg-opacity-20 hover:bg-gray-500`}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    
+                    <div className="p-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Owned Plants */}
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                            🌱 Your Plants ({plants.length})
+                          </h3>
+                          <div className="space-y-3 max-h-64 overflow-y-auto">
+                            {plants.map(plant => {
+                              const stage = plant.tasksCompleted >= 75 ? '🌺' : plant.tasksCompleted >= 50 ? '🌸' : plant.tasksCompleted >= 30 ? '🌳' : plant.tasksCompleted >= 15 ? '🪴' : plant.tasksCompleted >= 5 ? '🌿' : '🌱';
+                              return (
+                                <div key={plant.id} className="bg-green-50 rounded-lg p-3 border border-green-200">
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-2xl">{stage}</span>
+                                    <div className="flex-1">
+                                      <div className="font-medium text-gray-800">{plant.name}</div>
+                                      <div className="text-sm text-gray-600">{plant.tasksCompleted} tasks completed</div>
+                                      {plant.tasksCompleted >= 75 && (
+                                        <div className="text-xs text-green-600 font-medium">✅ Ready for garden!</div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Owned Themes */}
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                            🎨 Your Themes
+                          </h3>
+                          <div className="space-y-2">
+                            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                              <div className="flex items-center gap-3">
+                                <span className="text-xl">🌅</span>
+                                <div className="flex-1">
+                                  <div className="font-medium text-gray-800">Default Theme</div>
+                                  <div className="text-sm text-green-600">
+                                    {currentTheme === 'default' ? '✅ Active' : 'Available'}
+                                  </div>
+                                </div>
+                                {currentTheme !== 'default' && (
+                                  <button 
+                                    onClick={() => applyTheme('default')}
+                                    className="text-sm text-blue-600 hover:text-blue-800"
+                                  >
+                                    Apply
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                            {ownedItems.filter(id => id.startsWith('theme_')).map(themeId => (
+                              <div key={themeId} className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-xl">
+                                    {themeId === 'theme_dark' ? '🌙' : themeId === 'theme_forest' ? '🌲' : 
+                                     themeId === 'theme_ocean' ? '🌊' : themeId === 'theme_sunset' ? '🌅' : '🌌'}
+                                  </span>
+                                  <div className="flex-1">
+                                    <div className="font-medium text-gray-800">
+                                      {themeId.replace('theme_', '').replace('_', ' ')} Theme
+                                    </div>
+                                    <div className="text-sm text-gray-600">
+                                      {currentTheme === themeId ? '✅ Active' : 'Available'}
+                                    </div>
+                                  </div>
+                                  {currentTheme !== themeId && (
+                                    <button 
+                                      onClick={() => applyTheme(themeId)}
+                                      className="text-sm text-purple-600 hover:text-purple-800"
+                                    >
+                                      Apply
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Owned Decorations */}
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                            🏺 Your Decorations
+                          </h3>
+                          <div className="space-y-2">
+                            {ownedItems.filter(id => !id.startsWith('theme_') && !['cactus', 'rose', 'sunflower', 'tulip', 'cherry_blossom', 'palm_tree', 'bamboo', 'lotus'].includes(id)).map((decorId, index) => {
+                              const baseId = decorId.split('-')[0]; // Get base decoration type
+                              const decorData = {
+                                lantern: { emoji: '🏮', name: 'Garden Lantern', size: 1 },
+                                bench: { emoji: '🪑', name: 'Garden Bench', size: 1 },
+                                statue: { emoji: '🗿', name: 'Garden Statue', size: 1 },
+                                fountain: { emoji: '⛲', name: 'Garden Fountain', size: 2 },
+                                pond: { emoji: '🐠', name: 'Koi Pond', size: 2 },
+                                pavilion: { emoji: '🏯', name: 'Garden Pavilion', size: 2 },
+                                gazebo: { emoji: '🏛️', name: 'Grand Gazebo', size: 3 },
+                                windmill: { emoji: '🌪️', name: 'Dutch Windmill', size: 3 },
+                                greenhouse: { emoji: '🏠', name: 'Glass Greenhouse', size: 3 }
+                              };
+                              const data = decorData[baseId] || { emoji: '🏺', name: baseId.replace('_', ' '), size: 1 };
+                              
+                              return (
+                                <div key={decorId} className="bg-amber-50 rounded-lg p-3 border border-amber-200">
+                                  <div className="flex items-center gap-3">
+                                    <span className={`${data.size ? `decor-size-${data.size}` : 'text-xl'}`}>{data.emoji}</span>
+                                    <div className="flex-1">
+                                      <div className="font-medium text-gray-800">{data.name}</div>
+                                      <div className="text-xs text-blue-600">
+                                        Size: {data.size}x{data.size} {data.size === 1 ? '(Small)' : data.size === 2 ? '(Medium)' : '(Large)'}
+                                      </div>
+                                      <div className="text-sm text-gray-600">Available for garden</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Garden Visualizer Modal */}
+              {showGardenVisualizer && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl w-full max-w-7xl max-h-[90vh] overflow-y-auto`}>
+                    <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-2xl font-bold text-gray-800">Your Garden Layout</h2>
+                        <div className="text-sm text-gray-600 mt-1">Place your fully grown plants and decorations in your garden</div>
+                      </div>
+                      <button
+                        onClick={() => setShowGardenVisualizer(false)}
+                        className={`p-2 rounded-lg transition-colors ${currentThemeStyles?.textColor || 'text-gray-800'} hover:bg-opacity-20 hover:bg-gray-500`}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    
+                    <div className="p-6">
+                      <div className="flex gap-6">
+                        {/* Available Items */}
+                        <div className="w-64 flex-shrink-0">
+                          <h3 className="text-lg font-semibold text-gray-800 mb-4">Available Items</h3>
+                          <div className="space-y-2 max-h-96 overflow-y-auto">
+                            {plants.filter(plant => plant.tasksCompleted >= 75).map(plant => (
+                              <div
+                                key={plant.id}
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, plant)}
+                                className="bg-green-50 rounded-lg p-3 border border-green-200 cursor-move hover:bg-green-100 transition-colors"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xl">🌺</span>
+                                  <div className="text-sm font-medium text-gray-800">{plant.name}</div>
+                                </div>
+                              </div>
+                            ))}
+                            {ownedItems.filter(id => !id.startsWith('theme_') && !['cactus', 'rose', 'sunflower', 'tulip', 'cherry_blossom', 'palm_tree', 'bamboo', 'lotus'].includes(id)).map(decorId => {
+                              const baseId = decorId.split('-')[0]; // Get base decoration type
+                              const decorData = {
+                                lantern: { emoji: '🏮', name: 'Garden Lantern', size: 1 },
+                                bench: { emoji: '🪑', name: 'Garden Bench', size: 1 },
+                                statue: { emoji: '🗿', name: 'Garden Statue', size: 1 },
+                                fountain: { emoji: '⛲', name: 'Garden Fountain', size: 2 },
+                                pond: { emoji: '🐠', name: 'Koi Pond', size: 2 },
+                                pavilion: { emoji: '🏯', name: 'Garden Pavilion', size: 2 },
+                                gazebo: { emoji: '🏛️', name: 'Grand Gazebo', size: 3 },
+                                windmill: { emoji: '🌪️', name: 'Dutch Windmill', size: 3 },
+                                greenhouse: { emoji: '🏠', name: 'Glass Greenhouse', size: 3 }
+                              };
+                              const data = decorData[baseId] || { emoji: '🏺', name: baseId.replace('_', ' '), size: 1 };
+                              const decorItem = {
+                                id: decorId,
+                                name: data.name,
+                                type: 'decor',
+                                emoji: data.emoji,
+                                size: data.size
+                              };
+                              return (
+                                <div
+                                  key={decorId}
+                                  draggable
+                                  onDragStart={(e) => handleDragStart(e, decorItem)}
+                                  className="bg-amber-50 rounded-lg p-3 border border-amber-200 cursor-move hover:bg-amber-100 transition-colors"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <span className={`${decorItem.size ? `decor-size-${decorItem.size}` : 'text-xl'}`}>{decorItem.emoji}</span>
+                                    <div className="flex-1">
+                                      <div className="text-sm font-medium text-gray-800">
+                                        {decorItem.name}
+                                      </div>
+                                      <div className="text-xs text-blue-600">
+                                        {decorItem.size}x{decorItem.size} {decorItem.size === 1 ? '(Small)' : decorItem.size === 2 ? '(Medium)' : '(Large)'}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Garden Grid */}
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-gray-800 mb-4">Garden Grid (20x20)</h3>
+                          <div className="bg-green-100 rounded-lg p-4 inline-block">
+                            <div className="grid grid-cols-20 gap-1" style={{ gridTemplateColumns: 'repeat(20, 1fr)' }}>
+                              {gardenGrid.map((row, rowIndex) =>
+                                row.map((cell, colIndex) => (
+                                  <div
+                                    key={`${rowIndex}-${colIndex}`}
+                                    onClick={() => {
+                                      if (cell) {
+                                        removePlantFromGarden(rowIndex, colIndex);
+                                      }
+                                    }}
+                                    onDragOver={handleDragOver}
+                                    onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
+                                    className={`w-6 h-6 border border-green-300 rounded cursor-pointer transition-colors ${
+                                      cell 
+                                        ? 'bg-green-200 hover:bg-red-200' 
+                                        : draggedItem 
+                                          ? 'bg-blue-100 hover:bg-blue-200 border-blue-400' 
+                                          : 'bg-white hover:bg-green-50'
+                                    }`}
+                                    title={cell ? `${cell.name} - Click to remove` : draggedItem ? 'Drop here' : 'Empty slot - Drag items here'}
+                                  >
+                                    {cell && cell.isMainCell !== false && (
+                                      <span className={`leading-none flex items-center justify-center h-full ${
+                                        cell.type === 'decor' && cell.size ? `decor-size-${cell.size}` : 'text-xs'
+                                      }`}>
+                                        {cell.type === 'plant' || !cell.type ? '🌺' : 
+                                         cell.type === 'decor' ? cell.emoji :
+                                         cell.id === 'fountain' ? '⛲' : cell.id === 'bench' ? '🪑' : 
+                                         cell.id === 'statue' ? '🗿' : cell.id === 'pond' ? '🐠' : 
+                                         cell.id === 'lantern' ? '🏮' : cell.id === 'windmill' ? '🌪️' : 
+                                         cell.id === 'gazebo' ? '🏛️' : cell.id === 'greenhouse' ? '🏠' : 
+                                         cell.id === 'pavilion' ? '🏯' : '🏺'}
+                                      </span>
+                                    )}
+                                  </div>
+                                ))
+                              )}
+                            </div>
+                          </div>
+                          <div className="mt-4 text-sm text-gray-600">
+                            <p>• <strong>Drag and drop</strong> items from the left panel to place them in your garden</p>
+                            <p>• <strong>Click</strong> on placed items to remove them from the garden</p>
+                            <p>• <strong>Decoration sizes:</strong> Small (1x1), Medium (2x2), Large (3x3)</p>
+                            <p>• Only <strong>fully grown plants</strong> (75+ tasks) and owned decorations can be placed</p>
+                            <p>• Empty slots turn <span className="text-blue-600 font-medium">blue</span> when dragging items</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Donation Modal */}
+              {showDonateModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl w-full max-w-md mx-4`}>
+                    <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-2xl font-bold text-gray-800">Support PROJECT:Echo</h2>
+                        <div className="text-sm text-gray-600 mt-1">Help keep this project running!</div>
+                      </div>
+                      <button
+                        onClick={() => setShowDonateModal(false)}
+                        className={`p-2 rounded-lg transition-colors ${currentThemeStyles?.textColor || 'text-gray-800'} hover:bg-opacity-20 hover:bg-gray-500`}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    
+                    <div className="p-6">
+                      <div className="text-center mb-6">
+                        <div className="text-6xl mb-4">💝</div>
+                        <p className="text-gray-700 mb-4">
+                          Your support helps us maintain and improve PROJECT:Echo for everyone!
+                        </p>
+                      </div>
+
+                      <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Donation Amount
+                        </label>
+                        <div className="flex gap-2 mb-3">
+                          {[3, 5, 10, 25].map(amount => (
+                            <button
+                              key={amount}
+                              onClick={() => setDonationAmount(amount)}
+                              className={`flex-1 py-2 px-3 rounded-lg border transition-colors ${
+                                donationAmount === amount
+                                  ? 'border-pink-500 bg-pink-50 text-pink-700'
+                                  : 'border-gray-300 hover:border-pink-300'
+                              }`}
+                            >
+                              ${amount}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600">$</span>
+                          <input
+                            type="number"
+                            min="1"
+                            max="1000"
+                            value={donationAmount}
+                            onChange={(e) => setDonationAmount(Math.max(1, parseInt(e.target.value) || 1))}
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="bg-blue-50 rounded-lg p-4 mb-6">
+                        <div className="text-sm text-blue-800">
+                          <div className="font-semibold mb-1">Demo Mode</div>
+                          <p>This is a demonstration. No real payment will be processed. You'll receive {donationAmount * 10} bonus coins instead!</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setShowDonateModal(false)}
+                          className="flex-1 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={handleDonation}
+                          className="flex-1 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                        >
+                          Donate ${donationAmount}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Header */}
+              <header className={`${currentThemeStyles.headerBg} shadow-sm border-b border-gray-200`}>
+                <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full border-2 border-white/30">
+                        <div className="w-4 h-4 rounded-full border border-white/50 m-0.5">
+                          <div className="w-2 h-2 rounded-full bg-white m-0.5"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <h1 className={`text-xl font-bold ${currentThemeStyles.textColor || 'text-gray-800'}`}>PROJECT:Echo</h1>
+                      <p className={`text-sm ${currentThemeStyles.textColor || 'text-gray-600'}`}>
+                        Welcome back, {currentUser?.name}
+                        {currentUser?.goals && currentUser.goals.length > 0 && (
+                          <span className={`ml-2 ${currentThemeStyles.accentColor || 'text-blue-600'}`}>
+                            • Ready to achieve your goals?
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
+                      <span>🪙</span>
+                      <span className="font-bold text-sm">
+                        {userCoins >= 999999 ? '999,999+' : userCoins}
+                      </span>
+                      {currentUser?.id === 'test-user' && (
+                        <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full ml-1">
+                          TEST
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setShowHealthTracker(true)}
+                      disabled={isButtonDisabled}
+                      className={`flex items-center gap-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      ❤️ Health
+                    </button>
+                    <button
+                      onClick={() => setShowFocusMode(true)}
+                      className="flex items-center gap-1 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                    >
+                      🎯 Focus
+                    </button>
+                    <button
+                      onClick={() => setShowShop(true)}
+                      disabled={isButtonDisabled}
+                      className={`flex items-center gap-1 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      🛍️ Shop
+                    </button>
+                    <button
+                      onClick={() => setShowInventory(true)}
+                      disabled={isButtonDisabled}
+                      className={`flex items-center gap-1 px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      🎒 Inventory
+                    </button>
+                    <button
+                      onClick={() => setShowGardenVisualizer(true)}
+                      disabled={isButtonDisabled}
+                      className={`flex items-center gap-1 px-3 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-sm ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      🏡 Garden
+                    </button>
+                    <button
+                      onClick={() => setShowDonateModal(true)}
+                      className="flex items-center gap-1 px-3 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors text-sm"
+                    >
+                      💝 Donate
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-1 px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors text-sm"
+                    >
+                      🚪 Logout
+                    </button>
+                  </div>
+                </div>
+              </header>
+
+              <div className="max-w-7xl mx-auto px-4 py-6">
+                {/* Welcome Message for New Users */}
+                {tasks.some(task => task.isStarterTask && !task.completed) && (
+                  <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-md p-6 mb-6 border border-purple-200">
+                    <div className="flex items-start gap-3">
+                      <div className="text-3xl">🎯</div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">Your Personalized Success Plan is Ready!</h3>
+                        <p className="text-gray-700 mb-3">
+                          Based on your goals, we've created a custom plan to help you succeed.
+                        </p>
+                        <div className="text-right">
+                          <div className="text-sm text-gray-600">Starter Plan Progress</div>
+                          <div className="text-lg font-bold text-purple-700">
+                            {tasks.filter(task => task.isStarterTask && task.completed).length} / {tasks.filter(task => task.isStarterTask).length}
+                          </div>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+                          <div 
+                            className="bg-purple-500 h-2 rounded-full transition-all duration-500"
+                            style={{ 
+                              width: `${tasks.filter(task => task.isStarterTask).length > 0 ? (tasks.filter(task => task.isStarterTask && task.completed).length / tasks.filter(task => task.isStarterTask).length) * 100 : 0}%` 
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* AI Task Suggestions */}
+                <AITaskSuggestions 
+                  tasks={tasks}
+                  currentUser={currentUser}
+                  onAddSuggestion={handleAddSuggestion}
+                  theme={currentThemeStyles}
+                />
+
+                {/* Plant Garden */}
+                <div className="mb-6">
+                  <PlantGarden 
+                    plants={plants}
+                    selectedPlant={selectedPlant}
+                    onPlantSelect={setSelectedPlant}
+                    userCoins={userCoins}
+                    theme={currentThemeStyles}
+                  />
+                </div>
+
+                {/* Stats Dashboard */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className={`${currentThemeStyles.cardBg} rounded-lg shadow-sm p-4`}>
+                    <div className={`text-2xl font-bold ${currentThemeStyles.textColor || 'text-gray-800'}`}>{stats.total}</div>
+                    <div className={`text-sm ${currentThemeStyles.textColor || 'text-gray-600'} opacity-75`}>Total Tasks</div>
+                  </div>
+                  <div className={`${currentThemeStyles.cardBg} rounded-lg shadow-sm p-4`}>
+                    <div className="text-2xl font-bold text-green-500">{stats.completed}</div>
+                    <div className={`text-sm ${currentThemeStyles.textColor || 'text-gray-600'} opacity-75`}>Completed</div>
+                  </div>
+                  <div className={`${currentThemeStyles.cardBg} rounded-lg shadow-sm p-4`}>
+                    <div className="text-2xl font-bold text-red-500">{stats.overdue}</div>
+                    <div className={`text-sm ${currentThemeStyles.textColor || 'text-gray-600'} opacity-75`}>Overdue</div>
+                  </div>
+                  <div className={`${currentThemeStyles.cardBg} rounded-lg shadow-sm p-4`}>
+                    <div className={`text-2xl font-bold ${currentThemeStyles.accentColor || 'text-blue-500'}`}>{stats.today}</div>
+                    <div className={`text-sm ${currentThemeStyles.textColor || 'text-gray-600'} opacity-75`}>Due Today</div>
+                  </div>
+                </div>
+
+                {/* Add Task Form */}
+                <div className={`${currentThemeStyles.cardBg} rounded-lg shadow-md p-6 mb-6`}>
+                  <h2 className={`text-lg font-semibold ${currentThemeStyles.textColor || 'text-gray-800'} mb-4`}>Add New Task</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                    <div className="lg:col-span-2">
+                      <input
+                        type="text"
+                        placeholder="What needs to be done?"
+                        value={newTask.text}
+                        onChange={(e) => setNewTask({...newTask, text: e.target.value})}
+                        onKeyPress={(e) => e.key === 'Enter' && addTask()}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="date"
+                        value={newTask.dueDate}
+                        onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <select
+                        value={newTask.priority}
+                        onChange={(e) => setNewTask({...newTask, priority: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                                                      <option value="low">Low Priority (2🪙)</option>
+                              <option value="medium">Medium Priority (5🪙)</option>
+                              <option value="high">High Priority (10🪙)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <select
+                        value={newTask.category}
+                        onChange={(e) => setNewTask({...newTask, category: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select Category</option>
+                        {categories.map(cat => (
+                          <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <select
+                        value={newTask.recurring}
+                        onChange={(e) => setNewTask({...newTask, recurring: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="none">No Repeat</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button
+                    onClick={addTask}
+                    disabled={isButtonDisabled}
+                    className={`mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    ➕ Add Task
+                  </button>
+                </div>
+
+                {/* Search and Filters */}
+                <div className={`${currentThemeStyles.cardBg} rounded-lg shadow-md p-4 mb-6`}>
+                  <div className="flex flex-col md:flex-row gap-4 items-center">
+                    <div className="flex-1 relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
+                      <input
+                        type="text"
+                        placeholder="Search tasks..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      {['all', 'active', 'completed', 'overdue', 'today', 'high'].map(filterType => (
+                        <button
+                          key={filterType}
+                          onClick={() => setFilter(filterType)}
+                          className={`px-3 py-2 rounded-lg capitalize text-sm font-medium transition-colors ${
+                            filter === filterType
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                        >
+                          {filterType === 'high' ? 'High Priority' : filterType}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tasks List */}
+                <div className={`${currentThemeStyles.cardBg} rounded-lg shadow-md overflow-hidden`}>
+                  {filteredTasks.length === 0 ? (
+                    <div className="p-8 text-center text-gray-500">
+                      <div className="text-4xl mb-4">📋</div>
+                      <p className="text-lg">
+                        {tasks.length === 0 
+                          ? "No tasks yet. Create your first task above!" 
+                          : `No ${filter} tasks found.`
+                        }
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-gray-200">
+                      {filteredTasks.map(task => (
+                        <div
+                          key={task.id}
+                          className={`p-4 transition-colors duration-200 ${
+                            task.completed ? 'bg-gray-50' : 'bg-white hover:bg-gray-50'
+                          }`}
+                        >
+                          {editingId === task.id ? (
+                            // Edit Mode
+                            <div className="space-y-3">
+                              <input
+                                type="text"
+                                value={editTask.text}
+                                onChange={(e) => setEditTask({...editTask, text: e.target.value})}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              />
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={saveEdit}
+                                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  onClick={cancelEdit}
+                                  className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            // View Mode
+                            <div className="flex items-center gap-4">
+                              <button
+                                onClick={() => toggleTask(task.id)}
+                                disabled={isButtonDisabled}
+                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors duration-200 ${
+                                  task.completed
+                                    ? 'bg-green-500 border-green-500 text-white'
+                                    : 'border-gray-300 hover:border-green-400'
+                                } ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                              >
+                                {task.completed && <span>✓</span>}
+                              </button>
+
+                              <div className="flex-1">
+                                <div className={`text-lg ${task.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+                                  {task.text}
+                                </div>
+                                <div className="flex items-center gap-4 mt-2 text-sm">
+                                  {task.dueDate && (
+                                    <div className={`flex items-center gap-1 ${
+                                      task.dueDate < new Date().toISOString().split('T')[0] && !task.completed 
+                                        ? 'text-red-600' : 'text-gray-600'
+                                    }`}>
+                                      📅 {task.dueDate}
+                                    </div>
+                                  )}
+                                  <div className={`px-2 py-1 rounded-full text-xs border ${priorityColors[task.priority]}`}>
+                                    {task.priority}
+                                  </div>
+                                  {task.category && (
+                                    <div className="flex items-center gap-1 text-gray-600">
+                                      🏷️ {task.category}
+                                    </div>
+                                  )}
+                                  {task.recurring !== 'none' && (
+                                    <div className="flex items-center gap-1 text-blue-600">
+                                      🔄 {task.recurring}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={() => startEditing(task)}
+                                  disabled={isButtonDisabled}
+                                  className={`p-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 rounded transition-colors duration-200 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                  ✏️
+                                </button>
+                                <button
+                                  onClick={() => deleteTask(task.id)}
+                                  disabled={isButtonDisabled}
+                                  className={`p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded transition-colors duration-200 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                  🗑️
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // Test if React is working at all
+        function TestComponent() {
+          return <div style={{padding: '20px', background: 'blue', color: 'white'}}>React is working!</div>;
+        }
+        
+        // Error boundary
+        class ErrorBoundary extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = { hasError: false, error: null };
+          }
+          
+          static getDerivedStateFromError(error) {
+            return { hasError: true, error };
+          }
+          
+          componentDidCatch(error, errorInfo) {
+            console.error('React Error:', error, errorInfo);
+          }
+          
+          render() {
+            if (this.state.hasError) {
+              return <div style={{padding: '20px', background: 'red', color: 'white'}}>
+                <h2>Something went wrong!</h2>
+                <p>{this.state.error?.toString()}</p>
+              </div>;
+            }
+            return this.props.children;
+          }
+        }
+        
+        // Render the app with error boundary
+        try {
+          ReactDOM.render(
+            <ErrorBoundary>
+              <ProjectEcho />
+            </ErrorBoundary>, 
+            document.getElementById('root')
+          );
+        } catch (error) {
+          console.error('Render Error:', error);
+          document.getElementById('root').innerHTML = '<div style="padding: 20px; background: red; color: white;">Failed to load: ' + error.toString() + '</div>';
+        }
+    </script>
+</body>
+</html>
