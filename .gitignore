@@ -48,6 +48,8 @@ coverage/
 .firebase/
 firebase-debug.log
 firebase-debug.*.log
+firebase-service-account.json
+server/config/firebase-service-account.json
 
 # Temporary files
 *.tmp
