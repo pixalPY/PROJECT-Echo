@@ -1449,18 +1449,143 @@
             setTasks(prev => [...prev, newTaskObj]);
           };
 
-          const handleLogout = () => {
-            setIsAuthenticated(false);
-            setCurrentUser(null);
-            setTasks([]);
-            setPlants([]);
-            setUserCoins(0);
-            setOwnedItems([]);
-            setCurrentTheme('default');
+          // Auto-save functionality
+          const [saveStatus, setSaveStatus] = useState('saved'); // 'saving', 'saved', 'error'
+          const [lastSaved, setLastSaved] = useState(new Date());
+
+          // Manual save function
+          const manualSave = async () => {
+            if (!currentUser || !currentUser.uid) {
+              alert('Please log in to save your data.');
+              return;
+            }
+
+            setSaveStatus('saving');
+            try {
+              await saveUserDataToFirebase({
+                tasks: tasks,
+                userCoins: userCoins,
+                ownedItems: ownedItems,
+                userTheme: currentTheme,
+                plants: plants,
+                goals: currentUser.goals || []
+              });
+              setSaveStatus('saved');
+              setLastSaved(new Date());
+            } catch (error) {
+              console.error('Manual save failed:', error);
+              setSaveStatus('error');
+              setTimeout(() => setSaveStatus('saved'), 3000);
+            }
+          };
+
+          // Auto-save every 30 seconds
+          useEffect(() => {
+            if (!currentUser || !currentUser.uid || !isAuthenticated) return;
+
+            const autoSaveInterval = setInterval(async () => {
+              try {
+                setSaveStatus('saving');
+                await saveUserDataToFirebase({
+                  tasks: tasks,
+                  userCoins: userCoins,
+                  ownedItems: ownedItems,
+                  userTheme: currentTheme,
+                  plants: plants,
+                  goals: currentUser.goals || [],
+                  lastAutoSave: new Date().toISOString()
+                });
+                setSaveStatus('saved');
+                setLastSaved(new Date());
+                console.log('✅ Auto-save completed');
+              } catch (error) {
+                console.error('Auto-save failed:', error);
+                setSaveStatus('error');
+                setTimeout(() => setSaveStatus('saved'), 3000);
+              }
+            }, 30000); // Save every 30 seconds
+
+            return () => clearInterval(autoSaveInterval);
+          }, [currentUser, tasks, userCoins, ownedItems, currentTheme, plants, isAuthenticated]);
+
+          // Save on page unload/beforeunload
+          useEffect(() => {
+            const handleBeforeUnload = async (e) => {
+              if (currentUser && currentUser.uid) {
+                // For modern browsers, we can't wait for async operations in beforeunload
+                // So we'll use sendBeacon or make it synchronous
+                try {
+                  await saveUserDataToFirebase({
+                    tasks: tasks,
+                    userCoins: userCoins,
+                    ownedItems: ownedItems,
+                    userTheme: currentTheme,
+                    plants: plants,
+                    goals: currentUser.goals || [],
+                    lastSave: new Date().toISOString()
+                  });
+                } catch (error) {
+                  console.error('Save on unload failed:', error);
+                }
+              }
+            };
+
+            window.addEventListener('beforeunload', handleBeforeUnload);
+            return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+          }, [currentUser, tasks, userCoins, ownedItems, currentTheme, plants]);
+
+          const handleLogout = async () => {
+            try {
+              // Save data before logging out
+              if (currentUser && currentUser.uid) {
+                setSaveStatus('saving');
+                await saveUserDataToFirebase({
+                  tasks: tasks,
+                  userCoins: userCoins,
+                  ownedItems: ownedItems,
+                  userTheme: currentTheme,
+                  plants: plants,
+                  goals: currentUser.goals || [],
+                  lastLogout: new Date().toISOString()
+                });
+                console.log('✅ Data saved before logout');
+              }
+
+              // Firebase sign out
+              const { signOut } = window.firebaseAuthFunctions;
+              const auth = window.firebaseAuth;
+              
+              if (auth && signOut) {
+                await signOut(auth);
+              }
+              
+              // Clear local state
+              setIsAuthenticated(false);
+              setCurrentUser(null);
+              setTasks([]);
+              setPlants([]);
+              setUserCoins(0);
+              setOwnedItems([]);
+              setCurrentTheme('default');
+              setSaveStatus('saved');
+              
+              console.log('✅ User logged out successfully');
+            } catch (error) {
+              console.error('Logout error:', error);
+              // Still log out locally even if save/signout fails
+              setIsAuthenticated(false);
+              setCurrentUser(null);
+              setTasks([]);
+              setPlants([]);
+              setUserCoins(0);
+              setOwnedItems([]);
+              setCurrentTheme('default');
+              setSaveStatus('saved');
+            }
           };
 
           // Task Functions
-          const addTask = () => {
+          const addTask = async () => {
             if (newTask.text.trim()) {
               const task = {
                 id: Date.now(),
@@ -1473,8 +1598,29 @@
                 recurring: newTask.recurring,
                 userId: currentUser.id
               };
-              setTasks([...tasks, task]);
+              const updatedTasks = [...tasks, task];
+              setTasks(updatedTasks);
               setNewTask({ text: '', dueDate: '', priority: 'medium', category: '', recurring: 'none' });
+              
+              // Save immediately after adding task
+              if (currentUser && currentUser.uid) {
+                setSaveStatus('saving');
+                try {
+                  await saveUserDataToFirebase({
+                    tasks: updatedTasks,
+                    userCoins: userCoins,
+                    ownedItems: ownedItems,
+                    userTheme: currentTheme,
+                    plants: plants
+                  });
+                  setSaveStatus('saved');
+                  setLastSaved(new Date());
+                } catch (error) {
+                  console.error('Save after adding task failed:', error);
+                  setSaveStatus('error');
+                  setTimeout(() => setSaveStatus('saved'), 3000);
+                }
+              }
             }
           };
 
@@ -2637,6 +2783,46 @@ For this demo, we'll just give you some bonus coins! 🎉`);
                     >
                       🏡 Garden
                     </button>
+                    {/* Save Status Indicator */}
+                    <div className="flex items-center gap-2 text-xs">
+                      {saveStatus === 'saving' && (
+                        <span className="flex items-center gap-1 text-blue-600">
+                          <div className="animate-spin w-3 h-3 border border-blue-600 border-t-transparent rounded-full"></div>
+                          Saving...
+                        </span>
+                      )}
+                      {saveStatus === 'saved' && (
+                        <span className="flex items-center gap-1 text-green-600">
+                          ✅ Saved {lastSaved.toLocaleTimeString()}
+                        </span>
+                      )}
+                      {saveStatus === 'error' && (
+                        <span className="flex items-center gap-1 text-red-600">
+                          ❌ Save failed
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Manual Save Button */}
+                    <button
+                      onClick={manualSave}
+                      disabled={saveStatus === 'saving'}
+                      className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors text-sm ${
+                        saveStatus === 'saving' 
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                          : 'bg-green-500 text-white hover:bg-green-600'
+                      }`}
+                    >
+                      {saveStatus === 'saving' ? (
+                        <>
+                          <div className="animate-spin w-3 h-3 border border-gray-500 border-t-transparent rounded-full"></div>
+                          Saving...
+                        </>
+                      ) : (
+                        <>💾 Save</>
+                      )}
+                    </button>
+
                     <button
                       onClick={() => setShowDonateModal(true)}
                       className="flex items-center gap-1 px-3 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors text-sm"
@@ -2645,7 +2831,12 @@ For this demo, we'll just give you some bonus coins! 🎉`);
                     </button>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-1 px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors text-sm"
+                      disabled={saveStatus === 'saving'}
+                      className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors text-sm ${
+                        saveStatus === 'saving'
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                      }`}
                     >
                       🚪 Logout
                     </button>
