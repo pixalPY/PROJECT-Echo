@@ -1,0 +1,26 @@
+// TEMPORARY FIRESTORE RULES FOR TESTING
+// Copy these rules to your Firebase Console -> Firestore Database -> Rules
+// Use these ONLY for testing, then switch back to the secure rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // TEMPORARY: Allow all authenticated users to read/write UserLOGININFORMATION
+    // This helps debug permission issues
+    match /UserLOGININFORMATION/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // TEMPORARY: Allow all authenticated users to read/write users collection
+    match /users/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow all other authenticated access for testing
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+
+// IMPORTANT: After testing works, replace with the secure rules from server/firestore.rules
