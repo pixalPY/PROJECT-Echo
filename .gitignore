@@ -4,9 +4,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Production builds (not needed for static HTML)
+# Production builds
 /build
 /dist
+build/
 
 # Netlify
 .netlify/

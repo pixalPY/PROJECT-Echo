@@ -1,8 +1,8 @@
 [build]
-  # No build command needed - we're serving static HTML
-  command = ""
-  # Publish the root directory since index.html is there
-  publish = "."
+  # Create a simple build that copies the main files to build directory
+  command = "mkdir -p build && cp index.html build/ && cp -r server build/ 2>/dev/null || true"
+  # Publish from the build directory to match Netlify UI expectations
+  publish = "build"
 
 [build.environment]
   # Disable npm install since we don't need it for static HTML
