@@ -1,6 +1,6 @@
 [build]
   # Create a simple build that copies the main files to build directory
-  command = "mkdir -p build && cp index.html build/ && cp -r server build/ 2>/dev/null || true"
+  command = "mkdir -p build && cp index.html build/ && cp -r server build/ 2>/dev/null || true && cd netlify/functions && npm install"
   # Publish from the build directory to match Netlify UI expectations
   publish = "build"
   # Functions directory for serverless functions
@@ -10,10 +10,13 @@
   # Disable npm install since we don't need it for static HTML
   NPM_FLAGS = "--no-optional"
 
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
 [[redirects]]
-  # Don't redirect API functions
-  from = "/.netlify/functions/*"
-  to = "/.netlify/functions/:splat"
+  # API endpoint for Stripe donations
+  from = "/api/stripe-donation"
+  to = "/.netlify/functions/stripe-donation"
   status = 200
 
 [[redirects]]
