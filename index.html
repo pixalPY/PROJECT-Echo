@@ -304,11 +304,18 @@
         }
 
         /* Enhanced text readability for all themed elements */
-        .theme-dark-bg * { color: #ffffff !important; }
-        .theme-forest-bg * { color: #ffffff !important; }
-        .theme-ocean-bg * { color: #ffffff !important; }
-        .theme-sunset-bg * { color: #ffffff !important; }
-        .theme-space-bg * { color: #ffffff !important; }
+        .theme-dark-bg *, .theme-dark-bg .text-gray-400, .theme-dark-bg .text-gray-500 { color: #ffffff !important; }
+        .theme-forest-bg *, .theme-forest-bg .text-gray-400, .theme-forest-bg .text-gray-500 { color: #ffffff !important; }
+        .theme-ocean-bg *, .theme-ocean-bg .text-gray-400, .theme-ocean-bg .text-gray-500 { color: #ffffff !important; }
+        .theme-sunset-bg *, .theme-sunset-bg .text-gray-400, .theme-sunset-bg .text-gray-500 { color: #ffffff !important; }
+        .theme-space-bg *, .theme-space-bg .text-gray-400, .theme-space-bg .text-gray-500 { color: #ffffff !important; }
+
+        /* Force white text on all inventory and task elements */
+        .theme-dark-bg .bg-white *, .theme-dark-bg .bg-white .text-gray-400, .theme-dark-bg .bg-white .text-gray-500 { color: #ffffff !important; }
+        .theme-forest-bg .bg-white *, .theme-forest-bg .bg-white .text-gray-400, .theme-forest-bg .bg-white .text-gray-500 { color: #ffffff !important; }
+        .theme-ocean-bg .bg-white *, .theme-ocean-bg .bg-white .text-gray-400, .theme-ocean-bg .bg-white .text-gray-500 { color: #ffffff !important; }
+        .theme-sunset-bg .bg-white *, .theme-sunset-bg .bg-white .text-gray-400, .theme-sunset-bg .bg-white .text-gray-500 { color: #ffffff !important; }
+        .theme-space-bg .bg-white *, .theme-space-bg .bg-white .text-gray-400, .theme-space-bg .bg-white .text-gray-500 { color: #ffffff !important; }
 
         /* Override for specific elements that should have different colors */
         .theme-dark-bg .theme-primary-btn { color: #000000 !important; }
@@ -348,6 +355,49 @@
           background-color: #1a1a3a !important; 
           color: #ffffff !important; 
           border-color: #3a3a5a !important; 
+        }
+
+        /* Specific overrides for inventory and task sections */
+        .theme-dark-bg .text-sm, .theme-dark-bg .text-xs { color: #ffffff !important; }
+        .theme-forest-bg .text-sm, .theme-forest-bg .text-xs { color: #ffffff !important; }
+        .theme-ocean-bg .text-sm, .theme-ocean-bg .text-xs { color: #ffffff !important; }
+        .theme-sunset-bg .text-sm, .theme-sunset-bg .text-xs { color: #ffffff !important; }
+        .theme-space-bg .text-sm, .theme-space-bg .text-xs { color: #ffffff !important; }
+
+        /* Force text in filter buttons to be white */
+        .theme-dark-bg button, .theme-dark-bg button * { color: #ffffff !important; }
+        .theme-forest-bg button, .theme-forest-bg button * { color: #ffffff !important; }
+        .theme-ocean-bg button, .theme-ocean-bg button * { color: #ffffff !important; }
+        .theme-sunset-bg button, .theme-sunset-bg button * { color: #ffffff !important; }
+        .theme-space-bg button, .theme-space-bg button * { color: #ffffff !important; }
+
+        /* Override for theme buttons to maintain proper colors */
+        .theme-dark-bg .theme-primary-btn, .theme-dark-bg .theme-primary-btn * { color: #000000 !important; }
+        .theme-forest-bg .theme-primary-btn, .theme-forest-bg .theme-primary-btn * { color: #E6FFE6 !important; }
+        .theme-ocean-bg .theme-primary-btn, .theme-ocean-bg .theme-primary-btn * { color: #ffffff !important; }
+        .theme-sunset-bg .theme-primary-btn, .theme-sunset-bg .theme-primary-btn * { color: #8B0000 !important; }
+        .theme-space-bg .theme-primary-btn, .theme-space-bg .theme-primary-btn * { color: #ffffff !important; }
+
+        /* Make sure gray buttons on themes have proper contrast */
+        .theme-dark-bg .bg-gray-100, .theme-dark-bg .bg-gray-200 { 
+          background-color: #444444 !important; 
+          color: #ffffff !important; 
+        }
+        .theme-forest-bg .bg-gray-100, .theme-forest-bg .bg-gray-200 { 
+          background-color: #3a5a3a !important; 
+          color: #ffffff !important; 
+        }
+        .theme-ocean-bg .bg-gray-100, .theme-ocean-bg .bg-gray-200 { 
+          background-color: #4a6a9a !important; 
+          color: #ffffff !important; 
+        }
+        .theme-sunset-bg .bg-gray-100, .theme-sunset-bg .bg-gray-200 { 
+          background-color: #9a5a5a !important; 
+          color: #ffffff !important; 
+        }
+        .theme-space-bg .bg-gray-100, .theme-space-bg .bg-gray-200 { 
+          background-color: #4a4a6a !important; 
+          color: #ffffff !important; 
         }
         .theme-forest-bg .text-gray-800 { color: #E6FFE6 !important; }
         .theme-ocean-bg .text-gray-800 { color: #ffffff !important; }
