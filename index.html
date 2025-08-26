@@ -1892,7 +1892,6 @@
                       ownedItems,
                       userTheme: currentTheme,
                       plants,
-                      selectedGoals,
                       healthData,
                       focusSession,
                       currentUser: currentUser.uid
@@ -1925,7 +1924,7 @@
                 window.history.replaceState({}, document.title, window.location.pathname);
               }, 1000);
             }
-          }, [currentUser, tasks, userCoins, ownedItems, currentTheme, plants, selectedGoals, healthData, focusSession]);
+          }, [currentUser, tasks, userCoins, ownedItems, currentTheme, plants, healthData, focusSession]);
 
           // Manual save function
           const manualSave = async () => {
