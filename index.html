@@ -1868,6 +1868,9 @@
 
           // Tab navigation state
           const [activeTab, setActiveTab] = useState('tasks');
+          const [showDonationSuccess, setShowDonationSuccess] = useState(false);
+          const [donationSuccessData, setDonationSuccessData] = useState({ amount: 0, coins: 0 });
+          const [donationProcessed, setDonationProcessed] = useState(false);
 
           // Handle Stripe payment success/cancel
           useEffect(() => {
@@ -1875,8 +1878,9 @@
             const donation = urlParams.get('donation');
             const amount = urlParams.get('amount');
 
-            if (donation === 'success' && amount && currentUser) {
-              // Payment was successful
+            if (donation === 'success' && amount && currentUser && !donationProcessed) {
+              // Payment was successful - process only once
+              setDonationProcessed(true);
               const bonusCoins = parseInt(amount) * 10;
               
               // Give bonus coins as a thank you
@@ -1906,14 +1910,11 @@
               });
               
               // Show success message with coin notification
-              setTimeout(() => {
-                alert(`🎉 Thank you for your donation of $${amount}!\n💰 You received ${bonusCoins} bonus coins!\n🚀 Your support helps keep PROJECT:Echo running.`);
-              }, 500);
+              setDonationSuccessData({ amount: parseInt(amount), coins: bonusCoins });
+              setShowDonationSuccess(true);
               
-              // Clean up URL without causing logout
-              setTimeout(() => {
-                window.history.replaceState({}, document.title, window.location.pathname);
-              }, 2000);
+              // Clean up URL immediately to prevent reprocessing
+              window.history.replaceState({}, document.title, window.location.pathname);
               
             } else if (donation === 'cancelled') {
               // Payment was cancelled
@@ -1921,10 +1922,10 @@
               
               // Clean up URL
               setTimeout(() => {
-                window.history.replaceState({}, document.title, window.location.pathname);
+              window.history.replaceState({}, document.title, window.location.pathname);
               }, 1000);
             }
-          }, [currentUser, tasks, userCoins, ownedItems, currentTheme, plants, healthData, focusSession]);
+          }, [currentUser, tasks, userCoins, ownedItems, currentTheme, plants, healthData, focusSession, donationProcessed]);
 
           // Manual save function
           const manualSave = async () => {
@@ -3209,6 +3210,48 @@
                           Donate ${donationAmount}
                         </button>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Donation Success Modal */}
+              {showDonationSuccess && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                  <div className={`${currentThemeStyles?.cardBg || 'bg-white'} rounded-lg shadow-xl w-full max-w-md mx-4 text-center`}>
+                    <div className="p-8">
+                      {/* Success Animation */}
+                      <div className="text-6xl mb-4 animate-bounce">🎉</div>
+                      
+                      {/* Title */}
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                        Thank You for Your Donation!
+                      </h2>
+                      
+                      {/* Donation Details */}
+                      <div className="bg-green-50 rounded-lg p-4 mb-6">
+                        <div className="text-green-800">
+                          <div className="text-lg font-semibold mb-2">
+                            💖 Donation: ${donationSuccessData.amount}
+                          </div>
+                          <div className="text-xl font-bold text-amber-600">
+                            🪙 Bonus Coins: +{donationSuccessData.coins}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Thank You Message */}
+                      <p className="text-gray-600 mb-6">
+                        🚀 Your support helps keep PROJECT:Echo running and improving!
+                      </p>
+                      
+                      {/* Close Button */}
+                      <button
+                        onClick={() => setShowDonationSuccess(false)}
+                        className="w-full px-6 py-3 theme-primary-btn rounded-lg transition-colors font-semibold"
+                      >
+                        Continue ✨
+                      </button>
                     </div>
                   </div>
                 </div>
