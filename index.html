@@ -1731,29 +1731,42 @@
           const [draggedItem, setDraggedItem] = useState(null);
           
           const placePlantInGarden = (row, col, item) => {
+            console.log(`🌱 placePlantInGarden called with row: ${row}, col: ${col}`, item);
+            
             if (item && ((item.tasksCompleted >= 75) || item.type === 'decor')) {
               const size = item.size || 1;
+              console.log(`🌱 Placing ${item.name} (${size}x${size}) at [${row}, ${col}]`);
               
               // Check if there's enough space for the item
-              if (row + size > 20 || col + size > 20) return; // Out of bounds
+              if (row + size > 20 || col + size > 20) {
+                console.log('🌱 ❌ Out of bounds');
+                return; // Out of bounds
+              }
               
               // Check if all required slots are empty
               for (let r = row; r < row + size; r++) {
                 for (let c = col; c < col + size; c++) {
-                  if (gardenGrid[r][c] !== null) return; // Slot occupied
+                  if (gardenGrid[r][c] !== null) {
+                    console.log(`🌱 ❌ Slot [${r}, ${c}] occupied`);
+                    return; // Slot occupied
+                  }
                 }
               }
               
+              console.log(`🌱 ✅ Placing item in grid`);
               setGardenGrid(prev => {
                 const newGrid = prev.map(r => [...r]);
                 // Place the item in all required slots
                 for (let r = row; r < row + size; r++) {
                   for (let c = col; c < col + size; c++) {
                     newGrid[r][c] = { ...item, isMainCell: r === row && c === col };
+                    console.log(`🌱 Set grid[${r}][${c}] = ${item.name} (isMainCell: ${r === row && c === col})`);
                   }
                 }
                 return newGrid;
               });
+            } else {
+              console.log('🌱 ❌ Item not valid for placement', item);
             }
           };
 
@@ -1790,18 +1803,27 @@
 
           const handleDrop = (e, row, col) => {
             e.preventDefault();
+            e.stopPropagation(); // Prevent event bubbling
+            
+            console.log(`🎯 Drop event at row: ${row}, col: ${col}`);
+            console.log('🏺 Dragged item:', draggedItem);
+            
             if (draggedItem) {
               const size = draggedItem.size || 1;
               let canPlace = true;
               
+              console.log(`📏 Item size: ${size}x${size}`);
+              
               // Check if there's enough space
               if (row + size > 20 || col + size > 20) {
+                console.log('❌ Not enough space - out of bounds');
                 canPlace = false;
               } else {
                 // Check if all required slots are empty
                 for (let r = row; r < row + size && canPlace; r++) {
                   for (let c = col; c < col + size && canPlace; c++) {
                     if (gardenGrid[r][c] !== null) {
+                      console.log(`❌ Slot [${r}, ${c}] is occupied`);
                       canPlace = false;
                     }
                   }
@@ -1809,7 +1831,10 @@
               }
               
               if (canPlace) {
+                console.log(`✅ Placing item at [${row}, ${col}]`);
                 placePlantInGarden(row, col, draggedItem);
+              } else {
+                console.log('❌ Cannot place item');
               }
             }
             setDraggedItem(null);
