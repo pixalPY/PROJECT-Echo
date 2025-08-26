@@ -173,6 +173,129 @@
         .theme-space-bg .text-gray-800 { color: #ffffff !important; }
         
         .theme-dark-bg .text-gray-600 { color: #cccccc !important; }
+        .theme-forest-bg .text-gray-600 { color: #B8D8B8 !important; }
+        .theme-ocean-bg .text-gray-600 { color: #E6F3FF !important; }
+        .theme-sunset-bg .text-gray-600 { color: #F5DEB3 !important; }
+        .theme-space-bg .text-gray-600 { color: #B8BCC8 !important; }
+        
+        .theme-dark-bg .text-gray-700 { color: #dddddd !important; }
+        .theme-forest-bg .text-gray-700 { color: #C8E8C8 !important; }
+        .theme-ocean-bg .text-gray-700 { color: #F0F8FF !important; }
+        .theme-sunset-bg .text-gray-700 { color: #F8E8C8 !important; }
+        .theme-space-bg .text-gray-700 { color: #C8CCD8 !important; }
+
+        /* Theme-aware button styles */
+        .theme-primary-btn {
+          transition: all 0.3s ease;
+        }
+        
+        /* Default theme (no class) - keep blue */
+        .theme-primary-btn { 
+          background-color: #3B82F6 !important; 
+          color: white !important; 
+        }
+        .theme-primary-btn:hover { 
+          background-color: #2563EB !important; 
+        }
+        
+        /* Dark theme - gold accent */
+        .theme-dark-bg .theme-primary-btn { 
+          background-color: #FFD700 !important; 
+          color: #000000 !important; 
+        }
+        .theme-dark-bg .theme-primary-btn:hover { 
+          background-color: #FFC107 !important; 
+        }
+        
+        /* Forest theme - brown accent */
+        .theme-forest-bg .theme-primary-btn { 
+          background-color: #8B4513 !important; 
+          color: #E6FFE6 !important; 
+        }
+        .theme-forest-bg .theme-primary-btn:hover { 
+          background-color: #A0522D !important; 
+        }
+        
+        /* Ocean theme - turquoise accent */
+        .theme-ocean-bg .theme-primary-btn { 
+          background-color: #00CED1 !important; 
+          color: #ffffff !important; 
+        }
+        .theme-ocean-bg .theme-primary-btn:hover { 
+          background-color: #20B2AA !important; 
+        }
+        
+        /* Sunset theme - gold accent */
+        .theme-sunset-bg .theme-primary-btn { 
+          background-color: #FFD700 !important; 
+          color: #8B0000 !important; 
+        }
+        .theme-sunset-bg .theme-primary-btn:hover { 
+          background-color: #FFA500 !important; 
+        }
+        
+        /* Space theme - purple accent */
+        .theme-space-bg .theme-primary-btn { 
+          background-color: #8D99AE !important; 
+          color: #ffffff !important; 
+        }
+        .theme-space-bg .theme-primary-btn:hover { 
+          background-color: #9DA8B5 !important; 
+        }
+
+        /* Theme-aware progress bars */
+        .theme-progress-bar {
+          transition: all 0.3s ease;
+        }
+        
+        /* Default - blue */
+        .theme-progress-bar { background-color: #3B82F6 !important; }
+        
+        /* Theme-specific progress colors */
+        .theme-dark-bg .theme-progress-bar { background-color: #FFD700 !important; }
+        .theme-forest-bg .theme-progress-bar { background-color: #8B4513 !important; }
+        .theme-ocean-bg .theme-progress-bar { background-color: #00CED1 !important; }
+        .theme-sunset-bg .theme-progress-bar { background-color: #FFD700 !important; }
+        .theme-space-bg .theme-progress-bar { background-color: #8D99AE !important; }
+
+        /* Theme-aware badges */
+        .theme-badge {
+          transition: all 0.3s ease;
+        }
+        
+        /* Default - blue */
+        .theme-badge { 
+          background-color: #3B82F6 !important; 
+          color: white !important; 
+        }
+        
+        /* Theme-specific badge colors */
+        .theme-dark-bg .theme-badge { 
+          background-color: #FFD700 !important; 
+          color: #000000 !important; 
+        }
+        .theme-forest-bg .theme-badge { 
+          background-color: #8B4513 !important; 
+          color: #E6FFE6 !important; 
+        }
+        .theme-ocean-bg .theme-badge { 
+          background-color: #00CED1 !important; 
+          color: #ffffff !important; 
+        }
+        .theme-sunset-bg .theme-badge { 
+          background-color: #FFD700 !important; 
+          color: #8B0000 !important; 
+        }
+        .theme-space-bg .theme-badge { 
+          background-color: #8D99AE !important; 
+          color: #ffffff !important; 
+        }
+        .theme-forest-bg .text-gray-800 { color: #E6FFE6 !important; }
+        .theme-ocean-bg .text-gray-800 { color: #ffffff !important; }
+        .theme-sunset-bg .text-gray-800 { color: #FFF8DC !important; }
+        .theme-space-bg .text-gray-800 { color: #ffffff !important; }
+        
+        .theme-dark-bg .text-gray-600 { color: #cccccc !important; }
         .theme-forest-bg .text-gray-600 { color: #B3E6B3 !important; }
         .theme-ocean-bg .text-gray-600 { color: #E0F6FF !important; }
         .theme-sunset-bg .text-gray-600 { color: #F5F5DC !important; }
@@ -394,7 +517,7 @@
                           />
                           <div className={`w-5 h-5 rounded border-2 mr-3 flex items-center justify-center ${
                             selectedGoals.includes(goal.id)
-                              ? 'border-blue-500 bg-blue-500'
+                              ? 'border-blue-500 theme-progress-bar'
                               : 'border-gray-300'
                           }`}>
                             {selectedGoals.includes(goal.id) && (
@@ -414,7 +537,7 @@
               
               <button
                 onClick={handleSubmit}
-                className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium mb-4"
+                className="w-full py-3 theme-primary-btn rounded-lg transition-colors font-medium mb-4"
               >
                 {authMode === 'login' ? 'Log In' : 'Create Account'}
               </button>
@@ -1945,7 +2068,7 @@
                         onClick={() => setAuthMode(mode)}
                         className={`flex-1 py-2 px-4 rounded-lg capitalize font-medium transition-colors ${
                           authMode === mode 
-                            ? 'bg-blue-500 text-white' 
+                            ? 'theme-primary-btn' 
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                         }`}
                       >
@@ -2010,7 +2133,7 @@
                       </button>
                       <button
                         onClick={startBreak}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                        className="px-4 py-2 theme-primary-btn rounded-lg transition-colors"
                       >
                         ☕ Break (5min)
                       </button>
@@ -2036,7 +2159,7 @@
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
                       <div 
-                        className="bg-blue-500 h-3 rounded-full transition-all duration-1000"
+                        className="theme-progress-bar h-3 rounded-full transition-all duration-1000"
                         style={{ width: `${((5 * 60 - breakTimer) / (5 * 60)) * 100}%` }}
                       ></div>
                     </div>
@@ -2118,7 +2241,7 @@
                       {(isTimerRunning || isInFocusMode) && (
                         <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
                           <div 
-                            className={`h-2 rounded-full transition-all duration-1000 ${isOnBreak ? 'bg-blue-500' : 'bg-green-500'}`}
+                            className={`h-2 rounded-full transition-all duration-1000 ${isOnBreak ? 'theme-progress-bar' : 'bg-green-500'}`}
                             style={{ 
                               width: isOnBreak 
                                 ? `${((5 * 60 - breakTimer) / (5 * 60)) * 100}%`
@@ -2151,7 +2274,7 @@
                               </button>
                               <button 
                                 onClick={startBreak}
-                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                                className="px-4 py-2 theme-primary-btn rounded-lg transition-colors"
                               >
                                 ☕ Break
                               </button>
@@ -2277,26 +2400,26 @@
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
                             <div 
-                              className="bg-blue-500 h-3 rounded-full transition-all duration-300" 
+                              className="theme-progress-bar h-3 rounded-full transition-all duration-300" 
                               style={{ width: `${Math.min((healthData.waterConsumed / healthData.waterGoal) * 100, 100)}%` }}
                             ></div>
                           </div>
                           <div className="flex gap-2">
                             <button
                               onClick={() => addWater(250)}
-                              className="flex-1 px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                              className="flex-1 px-2 py-1 theme-primary-btn rounded text-xs"
                             >
                               +250ml
                             </button>
                             <button
                               onClick={() => addWater(500)}
-                              className="flex-1 px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                              className="flex-1 px-2 py-1 theme-primary-btn rounded text-xs"
                             >
                               +500ml
                             </button>
                             <button
                               onClick={() => addWater(1000)}
-                              className="flex-1 px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                              className="flex-1 px-2 py-1 theme-primary-btn rounded text-xs"
                             >
                               +1L
                             </button>
@@ -2900,7 +3023,7 @@
                         {userCoins >= 999999 ? '999,999+' : userCoins}
                       </span>
                       {currentUser?.id === 'test-user' && (
-                        <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full ml-1">
+                        <span className="text-xs theme-badge px-2 py-0.5 rounded-full ml-1">
                           TEST
                         </span>
                       )}
@@ -2914,7 +3037,7 @@
                     </button>
                     <button
                       onClick={() => setShowFocusMode(true)}
-                      className="flex items-center gap-1 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                      className="flex items-center gap-1 px-3 py-2 theme-primary-btn rounded-lg transition-colors text-sm"
                     >
                       🎯 Focus
                     </button>
@@ -3134,7 +3257,7 @@
                   <button
                     onClick={addTask}
                     disabled={isButtonDisabled}
-                    className={`mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`mt-4 px-6 py-2 theme-primary-btn rounded-lg transition-colors flex items-center gap-2 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     ➕ Add Task
                   </button>
@@ -3160,7 +3283,7 @@
                           onClick={() => setFilter(filterType)}
                           className={`px-3 py-2 rounded-lg capitalize text-sm font-medium transition-colors ${
                             filter === filterType
-                              ? 'bg-blue-500 text-white'
+                              ? 'theme-primary-btn'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                           }`}
                         >
