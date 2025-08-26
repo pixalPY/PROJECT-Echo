@@ -310,12 +310,12 @@
         .theme-sunset-bg *, .theme-sunset-bg .text-gray-400, .theme-sunset-bg .text-gray-500 { color: #ffffff !important; }
         .theme-space-bg *, .theme-space-bg .text-gray-400, .theme-space-bg .text-gray-500 { color: #ffffff !important; }
 
-        /* Force white text on all inventory and task elements */
-        .theme-dark-bg .bg-white *, .theme-dark-bg .bg-white .text-gray-400, .theme-dark-bg .bg-white .text-gray-500 { color: #ffffff !important; }
-        .theme-forest-bg .bg-white *, .theme-forest-bg .bg-white .text-gray-400, .theme-forest-bg .bg-white .text-gray-500 { color: #ffffff !important; }
-        .theme-ocean-bg .bg-white *, .theme-ocean-bg .bg-white .text-gray-400, .theme-ocean-bg .bg-white .text-gray-500 { color: #ffffff !important; }
-        .theme-sunset-bg .bg-white *, .theme-sunset-bg .bg-white .text-gray-400, .theme-sunset-bg .bg-white .text-gray-500 { color: #ffffff !important; }
-        .theme-space-bg .bg-white *, .theme-space-bg .bg-white .text-gray-400, .theme-space-bg .bg-white .text-gray-500 { color: #ffffff !important; }
+        /* Force dark text on white background inventory cards */
+        .theme-dark-bg .bg-white *, .theme-dark-bg .bg-white .text-gray-400, .theme-dark-bg .bg-white .text-gray-500 { color: #000000 !important; }
+        .theme-forest-bg .bg-white *, .theme-forest-bg .bg-white .text-gray-400, .theme-forest-bg .bg-white .text-gray-500 { color: #000000 !important; }
+        .theme-ocean-bg .bg-white *, .theme-ocean-bg .bg-white .text-gray-400, .theme-ocean-bg .bg-white .text-gray-500 { color: #000000 !important; }
+        .theme-sunset-bg .bg-white *, .theme-sunset-bg .bg-white .text-gray-400, .theme-sunset-bg .bg-white .text-gray-500 { color: #000000 !important; }
+        .theme-space-bg .bg-white *, .theme-space-bg .bg-white .text-gray-400, .theme-space-bg .bg-white .text-gray-500 { color: #000000 !important; }
 
         /* Override for specific elements that should have different colors */
         .theme-dark-bg .theme-primary-btn { color: #000000 !important; }
@@ -398,6 +398,45 @@
         .theme-space-bg .bg-gray-100, .theme-space-bg .bg-gray-200 { 
           background-color: #4a4a6a !important; 
           color: #ffffff !important; 
+        }
+
+        /* Super specific overrides for inventory text that won't show */
+        [class*="theme-"] .bg-white span,
+        [class*="theme-"] .bg-white div,
+        [class*="theme-"] .bg-white p,
+        [class*="theme-"] .bg-white h1,
+        [class*="theme-"] .bg-white h2,
+        [class*="theme-"] .bg-white h3,
+        [class*="theme-"] .bg-white h4,
+        [class*="theme-"] .bg-white h5,
+        [class*="theme-"] .bg-white h6,
+        [class*="theme-"] .bg-white .text-sm,
+        [class*="theme-"] .bg-white .text-xs,
+        [class*="theme-"] .bg-white .text-lg,
+        [class*="theme-"] .bg-white .text-xl,
+        [class*="theme-"] .bg-white .text-gray-400,
+        [class*="theme-"] .bg-white .text-gray-500,
+        [class*="theme-"] .bg-white .text-gray-600,
+        [class*="theme-"] .bg-white .text-gray-700,
+        [class*="theme-"] .bg-white .text-gray-800 {
+          color: #000000 !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+
+        /* Even more specific for inventory cards */
+        .theme-dark-bg .bg-white .text-gray-400,
+        .theme-dark-bg .bg-white .text-gray-500,
+        .theme-forest-bg .bg-white .text-gray-400,
+        .theme-forest-bg .bg-white .text-gray-500,
+        .theme-ocean-bg .bg-white .text-gray-400,
+        .theme-ocean-bg .bg-white .text-gray-500,
+        .theme-sunset-bg .bg-white .text-gray-400,
+        .theme-sunset-bg .bg-white .text-gray-500,
+        .theme-space-bg .bg-white .text-gray-400,
+        .theme-space-bg .bg-white .text-gray-500 {
+          color: #333333 !important;
+          font-weight: 600 !important;
         }
         .theme-forest-bg .text-gray-800 { color: #E6FFE6 !important; }
         .theme-ocean-bg .text-gray-800 { color: #ffffff !important; }
