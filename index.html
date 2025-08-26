@@ -1875,23 +1875,57 @@
             const donation = urlParams.get('donation');
             const amount = urlParams.get('amount');
 
-            if (donation === 'success' && amount) {
+            if (donation === 'success' && amount && currentUser) {
               // Payment was successful
-              alert(`🎉 Thank you for your donation of $${amount}! Your support helps keep PROJECT:Echo running.`);
+              const bonusCoins = parseInt(amount) * 10;
               
-              // Give bonus coins as a thank you (optional)
-              setUserCoins(prev => prev + (parseInt(amount) * 10));
+              // Give bonus coins as a thank you
+              setUserCoins(prev => {
+                const newCoins = prev + bonusCoins;
+                
+                // Save to Firebase immediately
+                setTimeout(async () => {
+                  try {
+                    await saveUserData({
+                      tasks,
+                      userCoins: newCoins,
+                      ownedItems,
+                      userTheme: currentTheme,
+                      plants,
+                      selectedGoals,
+                      healthData,
+                      focusSession,
+                      currentUser: currentUser.uid
+                    });
+                    console.log('✅ Donation bonus coins saved to Firebase');
+                  } catch (error) {
+                    console.error('❌ Error saving donation bonus:', error);
+                  }
+                }, 1000);
+                
+                return newCoins;
+              });
               
-              // Clean up URL
-              window.history.replaceState({}, document.title, window.location.pathname);
+              // Show success message with coin notification
+              setTimeout(() => {
+                alert(`🎉 Thank you for your donation of $${amount}!\n💰 You received ${bonusCoins} bonus coins!\n🚀 Your support helps keep PROJECT:Echo running.`);
+              }, 500);
+              
+              // Clean up URL without causing logout
+              setTimeout(() => {
+                window.history.replaceState({}, document.title, window.location.pathname);
+              }, 2000);
+              
             } else if (donation === 'cancelled') {
               // Payment was cancelled
               alert('💙 No worries! Thank you for considering a donation to support PROJECT:Echo.');
               
               // Clean up URL
-              window.history.replaceState({}, document.title, window.location.pathname);
+              setTimeout(() => {
+                window.history.replaceState({}, document.title, window.location.pathname);
+              }, 1000);
             }
-          }, []);
+          }, [currentUser, tasks, userCoins, ownedItems, currentTheme, plants, selectedGoals, healthData, focusSession]);
 
           // Manual save function
           const manualSave = async () => {
