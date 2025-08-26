@@ -3097,48 +3097,63 @@
                         <div className="flex-1">
                           <h3 className="text-lg font-semibold text-gray-800 mb-4">Garden Grid (20x20)</h3>
                           <div className="bg-green-100 rounded-lg p-4 inline-block">
-                            <div className="grid grid-cols-20 gap-1" style={{ gridTemplateColumns: 'repeat(20, 1fr)' }}>
+                                                        <div className="grid grid-cols-20 gap-1" style={{ gridTemplateColumns: 'repeat(20, 1fr)' }}>
                               {gardenGrid.map((row, rowIndex) =>
-                                row.map((cell, colIndex) => (
-                                  <div
-                                    key={`${rowIndex}-${colIndex}`}
-                                    onClick={() => {
-                                      if (cell) {
-                                        removePlantFromGarden(rowIndex, colIndex);
-                                      }
-                                    }}
-                                    onDragOver={handleDragOver}
-                                    onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
-                                    className={`w-6 h-6 border border-green-300 rounded cursor-pointer transition-colors ${
-                                      cell 
-                                        ? (cell.isMainCell === false ? 'bg-green-100 border-green-200 opacity-60' : 'bg-green-200 hover:bg-red-200')
-                                        : draggedItem 
-                                          ? 'bg-blue-100 hover:bg-blue-200 border-blue-400' 
-                                          : 'bg-white hover:bg-green-50'
-                                    }`}
-                                    title={cell ? `${cell.name}${cell.size > 1 ? ` (${cell.size}x${cell.size})` : ''} - Click to remove` : draggedItem ? 'Drop here' : 'Empty slot - Drag items here'}
-                                  >
-                                    {cell && (
-                                      <span className={`leading-none flex items-center justify-center h-full ${
-                                        cell.isMainCell !== false 
-                                          ? (cell.type === 'decor' && cell.size ? `decor-size-${cell.size}` : 'text-xs')
-                                          : 'text-xs opacity-50'
-                                      }`}>
-                                        {cell.isMainCell !== false ? (
-                                          cell.type === 'plant' || !cell.type ? '🌺' : 
-                                         cell.type === 'decor' ? cell.emoji :
-                                         cell.id === 'fountain' ? '⛲' : cell.id === 'bench' ? '🪑' : 
-                                         cell.id === 'statue' ? '🗿' : cell.id === 'pond' ? '🐠' : 
-                                         cell.id === 'lantern' ? '🏮' : cell.id === 'windmill' ? '🌪️' : 
-                                         cell.id === 'gazebo' ? '🏛️' : cell.id === 'greenhouse' ? '🏠' : 
-                                          cell.id === 'pavilion' ? '🏯' : '🏺'
-                                        ) : (
-                                          '◦' /* Small dot to indicate occupied space */
-                                        )}
-                                      </span>
-                                    )}
-                                  </div>
-                                ))
+                                row.map((cell, colIndex) => {
+                                  // For occupied cells that are not main cells, render invisible placeholder
+                                  if (cell && cell.isMainCell === false) {
+                                    return (
+                                      <div
+                                        key={`${rowIndex}-${colIndex}`}
+                                        className="w-6 h-6 opacity-0 pointer-events-none"
+                                      />
+                                    );
+                                  }
+                                  
+                                  return (
+                                    <div
+                                      key={`${rowIndex}-${colIndex}`}
+                                      onClick={() => {
+                                        if (cell) {
+                                          removePlantFromGarden(rowIndex, colIndex);
+                                        }
+                                      }}
+                                      onDragOver={handleDragOver}
+                                      onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
+                                      className={`w-6 h-6 border border-green-300 rounded cursor-pointer transition-colors ${
+                                        cell 
+                                          ? 'bg-green-200 hover:bg-red-200'
+                                          : draggedItem 
+                                            ? 'bg-blue-100 hover:bg-blue-200 border-blue-400' 
+                                            : 'bg-white hover:bg-green-50'
+                                      }`}
+                                      style={{
+                                        // Make decoration span multiple grid cells
+                                        ...(cell && cell.size > 1 ? {
+                                          gridColumn: `span ${cell.size}`,
+                                          gridRow: `span ${cell.size}`,
+                                          width: `${cell.size * 24 + (cell.size - 1) * 4}px`, // Account for gaps
+                                          height: `${cell.size * 24 + (cell.size - 1) * 4}px`
+                                        } : {})
+                                      }}
+                                      title={cell ? `${cell.name}${cell.size > 1 ? ` (${cell.size}x${cell.size})` : ''} - Click to remove` : draggedItem ? 'Drop here' : 'Empty slot - Drag items here'}
+                                    >
+                                      {cell ? (
+                                        <span className={`leading-none flex items-center justify-center h-full ${
+                                          cell.type === 'decor' && cell.size ? `decor-size-${cell.size}` : 'text-xs'
+                                        }`}>
+                                          {cell.type === 'plant' || !cell.type ? '🌺' : 
+                                           cell.type === 'decor' ? cell.emoji :
+                                           cell.id === 'fountain' ? '⛲' : cell.id === 'bench' ? '🪑' : 
+                                           cell.id === 'statue' ? '🗿' : cell.id === 'pond' ? '🐠' : 
+                                           cell.id === 'lantern' ? '🏮' : cell.id === 'windmill' ? '🌪️' : 
+                                           cell.id === 'gazebo' ? '🏛️' : cell.id === 'greenhouse' ? '🏠' : 
+                                           cell.id === 'pavilion' ? '🏯' : '🏺'}
+                                        </span>
+                                      ) : null}
+                                    </div>
+                                  );
+                                })
                               )}
                             </div>
                           </div>
