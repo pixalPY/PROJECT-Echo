@@ -167,22 +167,34 @@
         
         /* Fix text colors on themed backgrounds */
         .theme-dark-bg .text-gray-800 { color: #ffffff !important; }
-        .theme-forest-bg .text-gray-800 { color: #E6FFE6 !important; }
+        .theme-forest-bg .text-gray-800 { color: #ffffff !important; }
         .theme-ocean-bg .text-gray-800 { color: #ffffff !important; }
-        .theme-sunset-bg .text-gray-800 { color: #FFF8DC !important; }
+        .theme-sunset-bg .text-gray-800 { color: #ffffff !important; }
         .theme-space-bg .text-gray-800 { color: #ffffff !important; }
         
-        .theme-dark-bg .text-gray-600 { color: #cccccc !important; }
-        .theme-forest-bg .text-gray-600 { color: #B8D8B8 !important; }
-        .theme-ocean-bg .text-gray-600 { color: #E6F3FF !important; }
-        .theme-sunset-bg .text-gray-600 { color: #F5DEB3 !important; }
-        .theme-space-bg .text-gray-600 { color: #B8BCC8 !important; }
+        .theme-dark-bg .text-gray-600 { color: #e0e0e0 !important; }
+        .theme-forest-bg .text-gray-600 { color: #f0f0f0 !important; }
+        .theme-ocean-bg .text-gray-600 { color: #f0f0f0 !important; }
+        .theme-sunset-bg .text-gray-600 { color: #f0f0f0 !important; }
+        .theme-space-bg .text-gray-600 { color: #f0f0f0 !important; }
         
-        .theme-dark-bg .text-gray-700 { color: #dddddd !important; }
-        .theme-forest-bg .text-gray-700 { color: #C8E8C8 !important; }
-        .theme-ocean-bg .text-gray-700 { color: #F0F8FF !important; }
-        .theme-sunset-bg .text-gray-700 { color: #F8E8C8 !important; }
-        .theme-space-bg .text-gray-700 { color: #C8CCD8 !important; }
+        .theme-dark-bg .text-gray-700 { color: #f0f0f0 !important; }
+        .theme-forest-bg .text-gray-700 { color: #ffffff !important; }
+        .theme-ocean-bg .text-gray-700 { color: #ffffff !important; }
+        .theme-sunset-bg .text-gray-700 { color: #ffffff !important; }
+        .theme-space-bg .text-gray-700 { color: #ffffff !important; }
+        
+        .theme-dark-bg .text-gray-500 { color: #d0d0d0 !important; }
+        .theme-forest-bg .text-gray-500 { color: #e8e8e8 !important; }
+        .theme-ocean-bg .text-gray-500 { color: #e8e8e8 !important; }
+        .theme-sunset-bg .text-gray-500 { color: #e8e8e8 !important; }
+        .theme-space-bg .text-gray-500 { color: #e8e8e8 !important; }
+        
+        .theme-dark-bg .text-gray-400 { color: #c0c0c0 !important; }
+        .theme-forest-bg .text-gray-400 { color: #e0e0e0 !important; }
+        .theme-ocean-bg .text-gray-400 { color: #e0e0e0 !important; }
+        .theme-sunset-bg .text-gray-400 { color: #e0e0e0 !important; }
+        .theme-space-bg .text-gray-400 { color: #e0e0e0 !important; }
 
         /* Theme-aware button styles */
         .theme-primary-btn {
@@ -289,6 +301,53 @@
         .theme-space-bg .theme-badge { 
           background-color: #8D99AE !important; 
           color: #ffffff !important; 
+        }
+
+        /* Enhanced text readability for all themed elements */
+        .theme-dark-bg * { color: #ffffff !important; }
+        .theme-forest-bg * { color: #ffffff !important; }
+        .theme-ocean-bg * { color: #ffffff !important; }
+        .theme-sunset-bg * { color: #ffffff !important; }
+        .theme-space-bg * { color: #ffffff !important; }
+
+        /* Override for specific elements that should have different colors */
+        .theme-dark-bg .theme-primary-btn { color: #000000 !important; }
+        .theme-forest-bg .theme-primary-btn { color: #E6FFE6 !important; }
+        .theme-ocean-bg .theme-primary-btn { color: #ffffff !important; }
+        .theme-sunset-bg .theme-primary-btn { color: #8B0000 !important; }
+        .theme-space-bg .theme-primary-btn { color: #ffffff !important; }
+
+        .theme-dark-bg .theme-badge { color: #000000 !important; }
+        .theme-forest-bg .theme-badge { color: #E6FFE6 !important; }
+        .theme-ocean-bg .theme-badge { color: #ffffff !important; }
+        .theme-sunset-bg .theme-badge { color: #8B0000 !important; }
+        .theme-space-bg .theme-badge { color: #ffffff !important; }
+
+        /* Ensure proper contrast for input fields */
+        .theme-dark-bg input, .theme-dark-bg textarea, .theme-dark-bg select { 
+          background-color: #2a2a2a !important; 
+          color: #ffffff !important; 
+          border-color: #444 !important; 
+        }
+        .theme-forest-bg input, .theme-forest-bg textarea, .theme-forest-bg select { 
+          background-color: #1a3a1a !important; 
+          color: #ffffff !important; 
+          border-color: #4a6a4a !important; 
+        }
+        .theme-ocean-bg input, .theme-ocean-bg textarea, .theme-ocean-bg select { 
+          background-color: #2a4a7a !important; 
+          color: #ffffff !important; 
+          border-color: #4a6a9a !important; 
+        }
+        .theme-sunset-bg input, .theme-sunset-bg textarea, .theme-sunset-bg select { 
+          background-color: #7a2a2a !important; 
+          color: #ffffff !important; 
+          border-color: #9a4a4a !important; 
+        }
+        .theme-space-bg input, .theme-space-bg textarea, .theme-space-bg select { 
+          background-color: #1a1a3a !important; 
+          color: #ffffff !important; 
+          border-color: #3a3a5a !important; 
         }
         .theme-forest-bg .text-gray-800 { color: #E6FFE6 !important; }
         .theme-ocean-bg .text-gray-800 { color: #ffffff !important; }
