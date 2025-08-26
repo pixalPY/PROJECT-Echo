@@ -150,9 +150,21 @@
         .theme-space-accent { color: #8D99AE !important; }
         
         /* Decoration size scaling */
-        .decor-size-1 { font-size: 0.75rem; } /* Small 1x1 */
-        .decor-size-2 { font-size: 1.2rem; }  /* Medium 2x2 */
-        .decor-size-3 { font-size: 1.5rem; } /* Large 3x3 */
+        .decor-size-1 { 
+          font-size: 0.875rem; /* 14px - Small 1x1 */
+          line-height: 1;
+        } 
+        .decor-size-2 { 
+          font-size: 1.25rem; /* 20px - Medium 2x2 */
+          line-height: 1;
+          font-weight: bold;
+        }  
+        .decor-size-3 { 
+          font-size: 1.75rem; /* 28px - Large 3x3 */
+          line-height: 1;
+          font-weight: bold;
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
         
         /* Custom width/height classes for grid cells */
         .w-18 { width: 4.5rem; } /* 72px for 3x3 grid (3 * 24px) */
@@ -1731,42 +1743,29 @@
           const [draggedItem, setDraggedItem] = useState(null);
           
           const placePlantInGarden = (row, col, item) => {
-            console.log(`🌱 placePlantInGarden called with row: ${row}, col: ${col}`, item);
-            
             if (item && ((item.tasksCompleted >= 75) || item.type === 'decor')) {
               const size = item.size || 1;
-              console.log(`🌱 Placing ${item.name} (${size}x${size}) at [${row}, ${col}]`);
               
               // Check if there's enough space for the item
-              if (row + size > 20 || col + size > 20) {
-                console.log('🌱 ❌ Out of bounds');
-                return; // Out of bounds
-              }
+              if (row + size > 20 || col + size > 20) return; // Out of bounds
               
               // Check if all required slots are empty
               for (let r = row; r < row + size; r++) {
                 for (let c = col; c < col + size; c++) {
-                  if (gardenGrid[r][c] !== null) {
-                    console.log(`🌱 ❌ Slot [${r}, ${c}] occupied`);
-                    return; // Slot occupied
-                  }
+                  if (gardenGrid[r][c] !== null) return; // Slot occupied
                 }
               }
               
-              console.log(`🌱 ✅ Placing item in grid`);
               setGardenGrid(prev => {
                 const newGrid = prev.map(r => [...r]);
                 // Place the item in all required slots
                 for (let r = row; r < row + size; r++) {
                   for (let c = col; c < col + size; c++) {
                     newGrid[r][c] = { ...item, isMainCell: r === row && c === col };
-                    console.log(`🌱 Set grid[${r}][${c}] = ${item.name} (isMainCell: ${r === row && c === col})`);
                   }
                 }
                 return newGrid;
               });
-            } else {
-              console.log('🌱 ❌ Item not valid for placement', item);
             }
           };
 
@@ -1805,25 +1804,18 @@
             e.preventDefault();
             e.stopPropagation(); // Prevent event bubbling
             
-            console.log(`🎯 Drop event at row: ${row}, col: ${col}`);
-            console.log('🏺 Dragged item:', draggedItem);
-            
             if (draggedItem) {
               const size = draggedItem.size || 1;
               let canPlace = true;
               
-              console.log(`📏 Item size: ${size}x${size}`);
-              
               // Check if there's enough space
               if (row + size > 20 || col + size > 20) {
-                console.log('❌ Not enough space - out of bounds');
                 canPlace = false;
               } else {
                 // Check if all required slots are empty
                 for (let r = row; r < row + size && canPlace; r++) {
                   for (let c = col; c < col + size && canPlace; c++) {
                     if (gardenGrid[r][c] !== null) {
-                      console.log(`❌ Slot [${r}, ${c}] is occupied`);
                       canPlace = false;
                     }
                   }
@@ -1831,10 +1823,7 @@
               }
               
               if (canPlace) {
-                console.log(`✅ Placing item at [${row}, ${col}]`);
                 placePlantInGarden(row, col, draggedItem);
-              } else {
-                console.log('❌ Cannot place item');
               }
             }
             setDraggedItem(null);
@@ -3137,11 +3126,11 @@
                                       }`}>
                                         {cell.isMainCell !== false ? (
                                           cell.type === 'plant' || !cell.type ? '🌺' : 
-                                          cell.type === 'decor' ? cell.emoji :
-                                          cell.id === 'fountain' ? '⛲' : cell.id === 'bench' ? '🪑' : 
-                                          cell.id === 'statue' ? '🗿' : cell.id === 'pond' ? '🐠' : 
-                                          cell.id === 'lantern' ? '🏮' : cell.id === 'windmill' ? '🌪️' : 
-                                          cell.id === 'gazebo' ? '🏛️' : cell.id === 'greenhouse' ? '🏠' : 
+                                         cell.type === 'decor' ? cell.emoji :
+                                         cell.id === 'fountain' ? '⛲' : cell.id === 'bench' ? '🪑' : 
+                                         cell.id === 'statue' ? '🗿' : cell.id === 'pond' ? '🐠' : 
+                                         cell.id === 'lantern' ? '🏮' : cell.id === 'windmill' ? '🌪️' : 
+                                         cell.id === 'gazebo' ? '🏛️' : cell.id === 'greenhouse' ? '🏠' : 
                                           cell.id === 'pavilion' ? '🏯' : '🏺'
                                         ) : (
                                           '◦' /* Small dot to indicate occupied space */
