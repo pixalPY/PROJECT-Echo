@@ -1129,7 +1129,8 @@
                         userCoins: userData.userCoins || 10,
                         ownedItems: userData.ownedItems || [],
                         userTheme: userData.userTheme || 'default',
-                        plants: userData.plants || []
+                        plants: userData.plants || [],
+                        gardenGrid: userData.gardenGrid || Array(20).fill(null).map(() => Array(20).fill(null))
                       };
                       
                       setCurrentUser(existingUser);
@@ -1138,6 +1139,7 @@
                       setUserCoins(existingUser.userCoins);
                       setPlants(existingUser.plants);
                       setCurrentTheme(existingUser.userTheme);
+                      setGardenGrid(existingUser.gardenGrid);
                       setIsAuthenticated(true);
                       setSaveStatus('saved');
                       
@@ -1916,6 +1918,7 @@
                       plants,
                       healthData,
                       focusSession,
+                      gardenGrid,
                       currentUser: currentUser.uid
                     });
                     console.log('✅ Donation bonus coins saved to Firebase');
@@ -1960,6 +1963,7 @@
                 ownedItems: ownedItems,
                 userTheme: currentTheme,
                 plants: plants,
+                gardenGrid: gardenGrid,
                 goals: currentUser.goals || []
               });
               setSaveStatus('saved');
@@ -1984,6 +1988,7 @@
                   ownedItems: ownedItems,
                   userTheme: currentTheme,
                   plants: plants,
+                  gardenGrid: gardenGrid,
                   goals: currentUser.goals || [],
                   lastAutoSave: new Date().toISOString()
                 });
@@ -2013,6 +2018,7 @@
                     ownedItems: ownedItems,
                     userTheme: currentTheme,
                     plants: plants,
+                    gardenGrid: gardenGrid,
                     goals: currentUser.goals || [],
                     lastSave: new Date().toISOString()
                   });
@@ -2037,6 +2043,7 @@
                   ownedItems: ownedItems,
                   userTheme: currentTheme,
                   plants: plants,
+                  gardenGrid: gardenGrid,
                   goals: currentUser.goals || [],
                   lastLogout: new Date().toISOString()
                 });
@@ -2103,7 +2110,8 @@
                     userCoins: userCoins,
                     ownedItems: ownedItems,
                     userTheme: currentTheme,
-                    plants: plants
+                    plants: plants,
+                    gardenGrid: gardenGrid
                   });
                   setSaveStatus('saved');
                   setLastSaved(new Date());
@@ -3099,61 +3107,56 @@
                           <div className="bg-green-100 rounded-lg p-4 inline-block">
                                                         <div className="grid grid-cols-20 gap-1" style={{ gridTemplateColumns: 'repeat(20, 1fr)' }}>
                               {gardenGrid.map((row, rowIndex) =>
-                                row.map((cell, colIndex) => {
-                                  // For occupied cells that are not main cells, render invisible placeholder
-                                  if (cell && cell.isMainCell === false) {
-                                    return (
-                                      <div
-                                        key={`${rowIndex}-${colIndex}`}
-                                        className="w-6 h-6 opacity-0 pointer-events-none"
-                                      />
-                                    );
-                                  }
-                                  
-                                  return (
-                                    <div
-                                      key={`${rowIndex}-${colIndex}`}
-                                      onClick={() => {
-                                        if (cell) {
-                                          removePlantFromGarden(rowIndex, colIndex);
-                                        }
-                                      }}
-                                      onDragOver={handleDragOver}
-                                      onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
-                                      className={`w-6 h-6 border border-green-300 rounded cursor-pointer transition-colors ${
-                                        cell 
-                                          ? 'bg-green-200 hover:bg-red-200'
-                                          : draggedItem 
-                                            ? 'bg-blue-100 hover:bg-blue-200 border-blue-400' 
-                                            : 'bg-white hover:bg-green-50'
-                                      }`}
-                                      style={{
-                                        // Make decoration span multiple grid cells
-                                        ...(cell && cell.size > 1 ? {
-                                          gridColumn: `span ${cell.size}`,
-                                          gridRow: `span ${cell.size}`,
-                                          width: `${cell.size * 24 + (cell.size - 1) * 4}px`, // Account for gaps
-                                          height: `${cell.size * 24 + (cell.size - 1) * 4}px`
-                                        } : {})
-                                      }}
-                                      title={cell ? `${cell.name}${cell.size > 1 ? ` (${cell.size}x${cell.size})` : ''} - Click to remove` : draggedItem ? 'Drop here' : 'Empty slot - Drag items here'}
-                                    >
-                                      {cell ? (
-                                        <span className={`leading-none flex items-center justify-center h-full ${
+                                row.map((cell, colIndex) => (
+                                  <div
+                                    key={`${rowIndex}-${colIndex}`}
+                                    onClick={() => {
+                                      if (cell) {
+                                        removePlantFromGarden(rowIndex, colIndex);
+                                      }
+                                    }}
+                                    onDragOver={handleDragOver}
+                                    onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
+                                    className={`w-6 h-6 border border-green-300 rounded cursor-pointer transition-colors relative ${
+                                      cell 
+                                        ? (cell.isMainCell === false ? 'bg-green-100 border-green-200 opacity-60' : 'bg-green-200 hover:bg-red-200')
+                                        : draggedItem 
+                                          ? 'bg-blue-100 hover:bg-blue-200 border-blue-400' 
+                                          : 'bg-white hover:bg-green-50'
+                                    }`}
+                                    title={cell ? `${cell.name}${cell.size > 1 ? ` (${cell.size}x${cell.size})` : ''} - Click to remove` : draggedItem ? 'Drop here' : 'Empty slot - Drag items here'}
+                                  >
+                                    {cell && cell.isMainCell !== false && (
+                                      <div 
+                                        className={`absolute inset-0 flex items-center justify-center ${
                                           cell.type === 'decor' && cell.size ? `decor-size-${cell.size}` : 'text-xs'
-                                        }`}>
-                                          {cell.type === 'plant' || !cell.type ? '🌺' : 
-                                           cell.type === 'decor' ? cell.emoji :
-                                           cell.id === 'fountain' ? '⛲' : cell.id === 'bench' ? '🪑' : 
-                                           cell.id === 'statue' ? '🗿' : cell.id === 'pond' ? '🐠' : 
-                                           cell.id === 'lantern' ? '🏮' : cell.id === 'windmill' ? '🌪️' : 
-                                           cell.id === 'gazebo' ? '🏛️' : cell.id === 'greenhouse' ? '🏠' : 
-                                           cell.id === 'pavilion' ? '🏯' : '🏺'}
-                                        </span>
-                                      ) : null}
-                                    </div>
-                                  );
-                                })
+                                        }`}
+                                        style={{
+                                          // Visual scaling for larger decorations
+                                          ...(cell.size > 1 ? {
+                                            width: `${cell.size * 100}%`,
+                                            height: `${cell.size * 100}%`,
+                                            transform: `scale(${Math.min(cell.size * 0.8, 2)})`,
+                                            zIndex: 10
+                                          } : {})
+                                        }}
+                                      >
+                                        {cell.type === 'plant' || !cell.type ? '🌺' : 
+                                         cell.type === 'decor' ? cell.emoji :
+                                         cell.id === 'fountain' ? '⛲' : cell.id === 'bench' ? '🪑' : 
+                                         cell.id === 'statue' ? '🗿' : cell.id === 'pond' ? '🐠' : 
+                                         cell.id === 'lantern' ? '🏮' : cell.id === 'windmill' ? '🌪️' : 
+                                         cell.id === 'gazebo' ? '🏛️' : cell.id === 'greenhouse' ? '🏠' : 
+                                         cell.id === 'pavilion' ? '🏯' : '🏺'}
+                                      </div>
+                                    )}
+                                    {cell && cell.isMainCell === false && (
+                                      <div className="absolute inset-0 flex items-center justify-center text-xs opacity-50">
+                                        ◦
+                                      </div>
+                                    )}
+                                  </div>
+                                ))
                               )}
                             </div>
                           </div>
